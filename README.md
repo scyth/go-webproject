@@ -42,8 +42,8 @@ Start programming your handlers! Edit src/handlers.go and write some stuff based
 
 Compile and run the server, asuming your current working directory is still project root
 
-* $ make
-* $ ./runserver -config=config/server.conf
+* `$ make`
+* `$ ./runserver -config=config/server.conf`
 
 Open up your browser and see if your code works as expected.
 

@@ -17,7 +17,7 @@ var (
 
 
 func init() {
-	flag.StringVar(&configPath, "config", "", "path to configuration file")
+	flag.StringVar(&configPath, "config", "config/server.conf", "path to configuration file")
 	flag.Parse()
 	_, err := os.Stat(configPath)
 	if err != nil {

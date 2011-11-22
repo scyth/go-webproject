@@ -5,6 +5,14 @@ A lightweight toolkit/framework to get you started with web programming in Go.
 It compiles with the latest weekly release of Go, so keep your code up2date! I tend to keep it this way until Go v1 comes out in a month or two.
 
 
+--- Features
+
+* text/template package from standard go library is used
+* template caching is in place
+* basic route handling provided by http package
+* external configuration file for app settings
+
+
 Installation
 ------------
 
@@ -13,15 +21,16 @@ Installation
 * `$ git clone git@github.com:scyth/go-webproject.git`
 * `$ cd go-webproject`
 
+
 ### Step 2
 
 Create your configuration file, like example below:
 
-`[default]
+[default]
 listen		= 127.0.0.1:8000
 projectroot	= /path/to/go-webproject
 templatepath	= /path/to/go-webproject/templates
-tmpdir		= /tmp`
+tmpdir		= /tmp
 
 and save it in config/server.conf file.
 

@@ -7,10 +7,10 @@ It compiles with the latest weekly release of Go, so keep your code up2date! I t
 
 ### Features
 
-	* text/template package from standard go library is used
-	* template caching is in place
-	* basic route handling provided by http package
-	* external configuration file for app settings
+* text/template package from standard go library is used
+* template caching is in place
+* basic route handling provided by http package
+* external configuration file for app settings
 
 
 Installation
@@ -18,8 +18,8 @@ Installation
 
 ### Step 1
 
-	* `$ git clone git@github.com:scyth/go-webproject.git`
-	* `$ cd go-webproject`
+* `$ git clone git@github.com:scyth/go-webproject.git`
+* `$ cd go-webproject`
 
 
 ### Step 2
@@ -40,10 +40,10 @@ Start programming your handlers! Edit src/handlers.go and write some stuff based
 
 ### Step 4
 
-Run the server
+Compile and run the server, asuming your current working directory is still project root
 
-	* `$ make` -- asuming your current working directory is project root
-	* `$ ./runserver -config=config/server.conf`
+* $ make
+* $ ./runserver -config=config/server.conf
 
 Open up your browser and see if your code works as expected.
 

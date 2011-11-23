@@ -11,7 +11,7 @@ func initHandlers(r *mux.Router) {
 }
 
 func myhandler(writer http.ResponseWriter, req *http.Request) {
-	tpl, err := loadTemplate("example.html")
+	tpl, err := loadTemplate("index.html")
 	if err != nil {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return

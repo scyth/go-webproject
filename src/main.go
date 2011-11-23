@@ -1,22 +1,21 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-	"text/template"
-	"flag"
-	"os"
-	"strings"
 	"../goconf/goconf"
 	"../gorilla/mux/mux"
+	"flag"
+	"fmt"
+	"net/http"
+	"os"
+	"strings"
+	"text/template"
 )
 
 var (
 	configPath string
-	ac *AppConfig
-	router *mux.Router
+	ac         *AppConfig
+	router     *mux.Router
 )
-
 
 func init() {
 	flag.StringVar(&configPath, "config", "config/server.conf", "path to configuration file")
@@ -27,16 +26,15 @@ func init() {
 		os.Exit(1)
 	}
 	ac = NewAppConfig()
-	router = new(mux.Router)	
+	router = new(mux.Router)
 }
 
-
 type AppConfig struct {
-	ListenAddr 	string
-	ProjectRoot 	string
-	TempDir 	string
-	TemplatePath 	string
-	Templates 	map[string]*template.Template  // keys = relative file path, vals = parsed template objects
+	ListenAddr   string
+	ProjectRoot  string
+	TempDir      string
+	TemplatePath string
+	Templates    map[string]*template.Template // keys = relative file path, vals = parsed template objects
 }
 
 func NewAppConfig() *AppConfig {
@@ -45,17 +43,14 @@ func NewAppConfig() *AppConfig {
 	return ac
 }
 
-
-
-
 func main() {
 	// we read the config file
 	loadConfig(ac)
-	
+
 	// we setup our url handlers - see handlers.go
 	initHandlers(router)
 	http.Handle("/", router)
-	
+
 	// serve the world
 	err := http.ListenAndServe(ac.ListenAddr, nil)
 	if err != nil {
@@ -64,12 +59,11 @@ func main() {
 	}
 }
 
-
 func loadTemplate(name string) (tpl *template.Template, err error) {
 	if ac.Templates[name] != nil {
 		return ac.Templates[name], nil
 	}
-	
+
 	tpl, err = template.ParseFile(ac.TemplatePath + name)
 	if err != nil {
 		fmt.Println("Error loading template", err.Error())
@@ -79,21 +73,20 @@ func loadTemplate(name string) (tpl *template.Template, err error) {
 	return tpl, nil
 }
 
-
 func loadConfig(ac *AppConfig) {
-	c,err := goconf.ReadConfigFile(configPath)
+	c, err := goconf.ReadConfigFile(configPath)
 	checkConfigError(err)
 
-	conf_root,err := c.GetString("default", "projectRoot")
+	conf_root, err := c.GetString("default", "projectRoot")
 	checkConfigError(err)
 
-	conf_addr,err := c.GetString("default", "listen")
+	conf_addr, err := c.GetString("default", "listen")
 	checkConfigError(err)
 
-	conf_template_path,err := c.GetString("default", "templatePath")
+	conf_template_path, err := c.GetString("default", "templatePath")
 	checkConfigError(err)
 
-	conf_tmpdir,err := c.GetString("default", "tmpDir")
+	conf_tmpdir, err := c.GetString("default", "tmpDir")
 	checkConfigError(err)
 
 	// check if we have write access to temp dir
@@ -113,7 +106,7 @@ func loadConfig(ac *AppConfig) {
 
 	p := strings.TrimSpace(conf_template_path)
 	// check if path exists
-	if _,err := os.Stat(p); err != nil {
+	if _, err := os.Stat(p); err != nil {
 		fmt.Println("Configuration error, template directory does not exist")
 		os.Exit(1)
 	}
@@ -126,7 +119,7 @@ func loadConfig(ac *AppConfig) {
 	ac.ListenAddr = conf_addr
 	ac.TempDir = conf_tmpdir
 	ac.ProjectRoot = conf_root
-	
+
 }
 
 func checkConfigError(e error) {

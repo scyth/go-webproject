@@ -178,18 +178,18 @@ func (err GetError) String() string {
 }
 
 func (err GetError) Error() string {
-        switch err.Reason {
-        case SectionNotFound:
-                return fmt.Sprintf("section '%s' not found", string(err.Section))
-        case OptionNotFound:
-                return fmt.Sprintf("option '%s' not found in section '%s'", string(err.Option), string(err.Section))
-        case CouldNotParse:
-                return fmt.Sprintf("could not parse %s value '%s'", string(err.ValueType), string(err.Value))
-        case MaxDepthReached: 
-                return fmt.Sprintf("possible cycle while unfolding variables: max depth of %d reached", int(DepthValues))
-        }
+	switch err.Reason {
+	case SectionNotFound:
+		return fmt.Sprintf("section '%s' not found", string(err.Section))
+	case OptionNotFound:
+		return fmt.Sprintf("option '%s' not found in section '%s'", string(err.Option), string(err.Section))
+	case CouldNotParse:
+		return fmt.Sprintf("could not parse %s value '%s'", string(err.ValueType), string(err.Value))
+	case MaxDepthReached:
+		return fmt.Sprintf("possible cycle while unfolding variables: max depth of %d reached", int(DepthValues))
+	}
 
-        return "invalid get error"
+	return "invalid get error"
 }
 
 type ReadError struct {
@@ -207,4 +207,3 @@ func (err ReadError) Error() string {
 
 	return "invalid read error"
 }
-

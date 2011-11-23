@@ -9,8 +9,13 @@ It compiles with the latest weekly release of Go, so keep your code up2date! I t
 
 * text/template package from standard go library is used
 * template caching is in place
-* basic route handling provided by http package
+* integrated mux and context packages from gorilla project for advanced routing and easier request handling
 * external configuration file for app settings
+
+
+### References
+
+* Check out http://code.google.com/p/gorilla/ for mux and context documentation
 
 
 Installation
@@ -18,7 +23,7 @@ Installation
 
 ### Step 1
 
-* `$ git clone git@github.com:scyth/go-webproject.git`
+* `$ git clone git://github.com/scyth/go-webproject.git`
 * `$ cd go-webproject`
 
 
@@ -36,7 +41,7 @@ and save it in config/server.conf file.
 
 ### Step 3
 
-Start programming your handlers! Edit src/handlers.go and write some stuff based on examples provided.
+Start programming your handlers! Copy examples/handlers.go to src/, edit src/handlers.go and write some stuff based on examples provided.
 
 ### Step 4
 

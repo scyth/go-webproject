@@ -3,11 +3,12 @@ package main
 import (
 	"net/http"
 	"bytes"
+	"../gorilla/mux/mux"
 )
 
 
-func initHandlers() {
-	http.HandleFunc("/", myhandler)
+func initHandlers(r *mux.Router) {
+	r.HandleFunc("/", myhandler)
 }
 
 

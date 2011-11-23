@@ -10,10 +10,10 @@ endif
 
 
 all:
-	$(EXT)g -o goconf.$(EXT) conf.go get.go read.go write.go
+	$(EXT)g -o context.$(EXT) context.go doc.go
 
 clean:
-	rm -f goconf.$(EXT)
-        
-        
-        
+	
+	rm -f context.$(EXT)
+	
+	

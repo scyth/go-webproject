@@ -8,11 +8,13 @@ import (
 	"os"
 	"strings"
 	"../goconf/goconf"
+	"../gorilla/mux/mux"
 )
 
 var (
 	configPath string
 	ac *AppConfig
+	router *mux.Router
 )
 
 
@@ -25,6 +27,7 @@ func init() {
 		os.Exit(1)
 	}
 	ac = NewAppConfig()
+	router = new(mux.Router)	
 }
 
 
@@ -50,8 +53,9 @@ func main() {
 	loadConfig(ac)
 	
 	// we setup our url handlers - see handlers.go
-	initHandlers()
-
+	initHandlers(router)
+	http.Handle("/", router)
+	
 	// serve the world
 	err := http.ListenAndServe(ac.ListenAddr, nil)
 	if err != nil {

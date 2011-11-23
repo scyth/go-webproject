@@ -34,12 +34,12 @@ Copy the configuration file from examples/config/server.conf to config/server.co
 
 ### Step 3
 
-Start programming your handlers! Copy examples/handlers/handlers.go to src/, edit src/handlers.go and write some stuff based on examples provided.
+Copy sample templates from example/templates/ to your templatePath directory you previously defined.
 
 
 ### Step 4
 
-Copy sample templates from example/templates/ to your templatePath directory you previously defined.
+Start programming your handlers! Copy examples/handlers/handlers.go to src/, edit src/handlers.go and write some stuff based on examples provided.
 
 
 ### Step 5

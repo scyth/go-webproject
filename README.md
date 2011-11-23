@@ -9,8 +9,8 @@ It compiles with the latest weekly release of Go, so keep your code up2date! I t
 
 * text/template package from standard go library is used
 * template caching is in place
-* integrated mux and context packages from gorilla project for advanced routing and easier request handling
-* external configuration file for app settings
+* (optional) integrated mux and context packages from gorilla project for advanced routing and easier request handling
+* external configuration file for server and app settings
 
 
 ### References
@@ -29,21 +29,20 @@ Installation
 
 ### Step 2
 
-Create your configuration file, like example below:
+Copy the configuration file from examples/config/server.conf to config/server.conf and make appropriate changes for your environment.
 
-	[default]
-	listen		= 127.0.0.1:8000
-	projectroot	= /path/to/go-webproject
-	templatepath	= /path/to/go-webproject/templates
-	tmpdir		= /tmp
-
-and save it in config/server.conf file.
 
 ### Step 3
 
-Start programming your handlers! Copy examples/handlers.go to src/, edit src/handlers.go and write some stuff based on examples provided.
+Start programming your handlers! Copy examples/handlers/handlers.go to src/, edit src/handlers.go and write some stuff based on examples provided.
+
 
 ### Step 4
+
+Copy sample templates from example/templates/ to your templatePath directory you previously defined.
+
+
+### Step 5
 
 Compile and run the server, asuming your current working directory is still project root
 
@@ -52,4 +51,4 @@ Compile and run the server, asuming your current working directory is still proj
 
 Open up your browser and see if your code works as expected.
 
-Thanks.
+Enjoy!

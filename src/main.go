@@ -31,6 +31,7 @@ func init() {
 
 type AppConfig struct {
 	ListenAddr   string
+	Gorilla	     bool
 	ProjectRoot  string
 	TempDir      string
 	TemplatePath string
@@ -47,9 +48,12 @@ func main() {
 	// we read the config file
 	loadConfig(ac)
 
-	// we setup our url handlers - see handlers.go
-	initHandlers(router)
-	http.Handle("/", router)
+	if ac.Gorilla == true {
+		initHandlers(router)
+		http.Handle("/", router)
+	} else {
+		initHandlers(nil)
+	}
 
 	// serve the world
 	err := http.ListenAndServe(ac.ListenAddr, nil)
@@ -77,16 +81,19 @@ func loadConfig(ac *AppConfig) {
 	c, err := goconf.ReadConfigFile(configPath)
 	checkConfigError(err)
 
-	conf_root, err := c.GetString("default", "projectRoot")
+	conf_root, err := c.GetString("project", "root")
 	checkConfigError(err)
 
 	conf_addr, err := c.GetString("default", "listen")
 	checkConfigError(err)
 
-	conf_template_path, err := c.GetString("default", "templatePath")
+	conf_template_path, err := c.GetString("project", "templatePath")
 	checkConfigError(err)
 
-	conf_tmpdir, err := c.GetString("default", "tmpDir")
+	conf_mux, err := c.GetBool("default", "gorilla-mux")
+	checkConfigError(err)
+
+	conf_tmpdir, err := c.GetString("project", "tmpDir")
 	checkConfigError(err)
 
 	// check if we have write access to temp dir
@@ -119,6 +126,7 @@ func loadConfig(ac *AppConfig) {
 	ac.ListenAddr = conf_addr
 	ac.TempDir = conf_tmpdir
 	ac.ProjectRoot = conf_root
+	ac.Gorilla = conf_mux
 
 }
 

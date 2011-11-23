@@ -1,5 +1,5 @@
 *~
 config/server.conf
 src/handlers.go
-
+templates/*
 

@@ -7,7 +7,7 @@ import (
 )
 
 func initHandlers(r *mux.Router) {
-	r.HandleFunc("/", myhandler)
+	http.HandleFunc("/", myhandler)
 }
 
 func myhandler(writer http.ResponseWriter, req *http.Request) {
@@ -17,10 +17,10 @@ func myhandler(writer http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	mydir := Example{Name: "Joe"}
+	mydata := Example{Name: "Joe"}
 	buff := new(bytes.Buffer)
 
-	tpl.Execute(buff, mydir)
+	tpl.Execute(buff, mydata)
 	writer.Write(buff.Bytes())
 }
 

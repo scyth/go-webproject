@@ -1,2 +1,19 @@
-The name is {{.Name}}.
+<html>
+<head><title>Welcome</title></head>
+<body>
 
+{{if .LoggedIn}} 
+	User is logged in. Welcome {{.Name}}! 
+{{else}} 
+	{{with .ErrorMsg}} - {{.}} - <br /> {{end}}
+	<form name="login_form" action="/login" method="POST">
+	user: <input type="text" name="user" value=""><br />
+	pass: <input type="password" name="pass" value=""><br />
+	<input type="submit" name="submit" value="Login">
+	</form>
+{{end}}
+
+
+
+</body>
+</html>

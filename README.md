@@ -9,13 +9,14 @@ It compiles with the latest weekly release of Go, so keep your code up2date! I t
 
 * text/template package from standard go library is used
 * template caching is in place
-* (optional) integrated mux and context packages from gorilla project for advanced routing and easier request handling
+* (optional) integrated mux package from gorilla project for advanced routing and easier request handling
+* integrated sessions package from gorilla project for session management
 * external configuration file for server and app settings
 
 
 ### References
 
-* Check out http://code.google.com/p/gorilla/ for mux and context documentation
+* Check out http://code.google.com/p/gorilla/ for mux and sessions documentation
 
 
 Installation

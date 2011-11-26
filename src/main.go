@@ -3,6 +3,7 @@ package main
 import (
 	"../goconf/goconf"
 	"../gorilla/mux/mux"
+	"../gorilla/sessions/sessions"
 	"flag"
 	"fmt"
 	"net/http"
@@ -27,6 +28,9 @@ func init() {
 	}
 	ac = NewAppConfig()
 	router = new(mux.Router)
+	
+	sessions.SetStoreKeys("cookie", []byte("my-simple-key-hmac"))
+
 }
 
 type AppConfig struct {

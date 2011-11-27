@@ -9,6 +9,7 @@ It compiles with the latest weekly release of Go, so keep your code up2date! I t
 
 * text/template package from standard go library is used
 * template caching is in place
+* (optional) on the fly template reloading without need to restart the service
 * (optional) integrated mux package from gorilla project for advanced routing and easier request handling
 * integrated sessions package from gorilla project for session management
 * external configuration file for server and app settings
@@ -17,6 +18,12 @@ It compiles with the latest weekly release of Go, so keep your code up2date! I t
 ### References
 
 * Check out http://code.google.com/p/gorilla/ for mux and sessions documentation
+
+
+### Notes
+
+* When live-templates feature is used, due to current bug in exp/inotify package, when template file is being Watch()ed, if it gets removed and 
+replaced with another file of same name, updates to the new file are not tracked. I expect this to be resolved in future.
 
 
 Installation

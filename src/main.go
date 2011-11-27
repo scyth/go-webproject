@@ -4,6 +4,7 @@ import (
 	"../goconf/goconf"
 	"../gorilla/mux/mux"
 	"../gorilla/sessions/sessions"
+	"exp/inotify"
 	"flag"
 	"fmt"
 	"net/http"
@@ -16,6 +17,7 @@ var (
 	configPath string
 	ac         *AppConfig
 	router     *mux.Router
+	WatchList  map[string]bool
 )
 
 func init() {
@@ -28,22 +30,27 @@ func init() {
 	}
 	ac = NewAppConfig()
 	router = new(mux.Router)
-	
+
+	WatchList = make(map[string]bool)
+
 	sessions.SetStoreKeys("cookie", []byte("my-simple-key-hmac"))
 
 }
 
 type AppConfig struct {
-	ListenAddr   string
-	Gorilla	     bool
-	ProjectRoot  string
-	TempDir      string
-	TemplatePath string
-	Templates    map[string]*template.Template // keys = relative file path, vals = parsed template objects
+	ListenAddr    string
+	Gorilla       bool
+	ProjectRoot   string
+	TempDir       string
+	TemplatePath  string
+	LiveTemplates bool
+	LiveMsg	      chan *ParsedTemplate
+	Templates     map[string]*template.Template // keys = relative file path, vals = parsed template objects
 }
 
 func NewAppConfig() *AppConfig {
 	ac := new(AppConfig)
+	ac.LiveMsg = make(chan *ParsedTemplate)
 	ac.Templates = make(map[string]*template.Template)
 	return ac
 }
@@ -59,6 +66,9 @@ func main() {
 		initHandlers(nil)
 	}
 
+	// run the watcher for templates
+	go WatchTemplates()
+
 	// serve the world
 	err := http.ListenAndServe(ac.ListenAddr, nil)
 	if err != nil {
@@ -67,9 +77,66 @@ func main() {
 	}
 }
 
+
+type ParsedTemplate struct {
+	Name string
+	Tpl  *template.Template
+}
+
+
+func WatchTemplates() {
+	// we're tracking live changes to template files
+	if ac.LiveTemplates == true {
+		watcher, err := inotify.NewWatcher()
+		if err != nil {
+			fmt.Println("Could not create inotify watcher: ", err.Error())
+			return
+		}
+		defer watcher.Close()
+
+		for {
+			select {
+			case ev := <-watcher.Event:
+				// cached file was modified
+				if ac.Templates[ev.Name] != nil {
+					delete(ac.Templates, ev.Name)
+				}
+				if WatchList[ev.Name] == true {
+					watcher.RemoveWatch(ev.Name)
+					WatchList[ev.Name] = false
+				}
+
+			case ev := <-watcher.Error:
+				fmt.Println("Error from inotify.Watcher: ", ev)
+				os.Exit(1)
+			case ev := <-ac.LiveMsg:
+				ac.Templates[ev.Name] = ev.Tpl
+
+				// check if we're already watching this file name
+				if WatchList[ev.Name] == true {
+					watcher.RemoveWatch(ev.Name)
+					watcher.AddWatch(ev.Name, inotify.IN_MODIFY)
+				} else {
+					watcher.AddWatch(ev.Name, inotify.IN_MODIFY)
+					WatchList[ev.Name] = true
+				}
+			}
+		}
+	} else {
+
+		for {
+			ev := <-ac.LiveMsg
+			ac.Templates[ev.Name] = ev.Tpl
+		}
+	}
+
+
+}
+
+
 func loadTemplate(name string) (tpl *template.Template, err error) {
-	if ac.Templates[name] != nil {
-		return ac.Templates[name], nil
+	if ac.Templates[ac.TemplatePath + name] != nil {
+		return ac.Templates[ac.TemplatePath + name], nil
 	}
 
 	tpl, err = template.ParseFile(ac.TemplatePath + name)
@@ -77,7 +144,9 @@ func loadTemplate(name string) (tpl *template.Template, err error) {
 		fmt.Println("Error loading template", err.Error())
 		return nil, err
 	}
-	ac.Templates[name] = tpl
+	pt := &ParsedTemplate{ac.TemplatePath + name, tpl}
+
+	ac.LiveMsg <- pt
 	return tpl, nil
 }
 
@@ -98,6 +167,9 @@ func loadConfig(ac *AppConfig) {
 	checkConfigError(err)
 
 	conf_tmpdir, err := c.GetString("project", "tmpDir")
+	checkConfigError(err)
+
+	conf_livetpl, err := c.GetBool("project", "live-templates")
 	checkConfigError(err)
 
 	// check if we have write access to temp dir
@@ -131,6 +203,7 @@ func loadConfig(ac *AppConfig) {
 	ac.TempDir = conf_tmpdir
 	ac.ProjectRoot = conf_root
 	ac.Gorilla = conf_mux
+	ac.LiveTemplates = conf_livetpl
 
 }
 

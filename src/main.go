@@ -203,7 +203,6 @@ func loadConfig(ac *AppConfig) {
 	if !strings.HasSuffix(conf_template_path, "/") {
 		conf_template_path += "/"
 	}
-	fmt.Println("Template path is: ", conf_template_path)
 
 	conf_livetpl, err := c.GetBool("project", "live-templates")
 	checkConfigError(err, false)

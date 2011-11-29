@@ -53,7 +53,7 @@ func checkSession(req *http.Request, param string) (bool) {
 
 // indexPage() is a handler which will load some template and send the result back to the client
 func indexPage(writer http.ResponseWriter, req *http.Request) {
-	tpl, err := loadTemplate("index.html")
+	tpl, err := LoadTemplate("index.html")
 	if err != nil {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return

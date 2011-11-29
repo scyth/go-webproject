@@ -20,6 +20,13 @@ var (
 	WatchList  map[string]bool
 )
 
+const (
+	dflt_conf_addr = "127.0.0.1:8000"
+	dflt_conf_mux = true
+	dflt_conf_tmpdir = "/tmp/"
+        dflt_conf_livetpl = false
+)
+
 func init() {
 	flag.StringVar(&configPath, "config", "config/server.conf", "path to configuration file")
 	flag.Parse()
@@ -67,7 +74,7 @@ func main() {
 	}
 
 	// run the watcher for templates
-	go WatchTemplates()
+	go watchTemplates()
 
 	// serve the world
 	err := http.ListenAndServe(ac.ListenAddr, nil)
@@ -84,7 +91,9 @@ type ParsedTemplate struct {
 }
 
 
-func WatchTemplates() {
+// watchTemplates is responsible for template caching
+// and live reloading (if live-templates option is activated)
+func watchTemplates() {
 	// we're tracking live changes to template files
 	if ac.LiveTemplates == true {
 		watcher, err := inotify.NewWatcher()
@@ -108,6 +117,7 @@ func WatchTemplates() {
 
 			case ev := <-watcher.Error:
 				fmt.Println("Error from inotify.Watcher: ", ev)
+				// this probably means something has gone terribly wrong, so we exit
 				os.Exit(1)
 			case ev := <-ac.LiveMsg:
 				ac.Templates[ev.Name] = ev.Tpl
@@ -122,6 +132,7 @@ func WatchTemplates() {
 				}
 			}
 		}
+	// we're just preloading/caching templates. No runtime updates are possible.
 	} else {
 
 		for {
@@ -134,7 +145,9 @@ func WatchTemplates() {
 }
 
 
-func loadTemplate(name string) (tpl *template.Template, err error) {
+// LoadTemplate is API call which will return parsed template object, and will do this fast.
+// It is also thread safe
+func LoadTemplate(name string) (tpl *template.Template, err error) {
 	if ac.Templates[ac.TemplatePath + name] != nil {
 		return ac.Templates[ac.TemplatePath + name], nil
 	}
@@ -150,36 +163,47 @@ func loadTemplate(name string) (tpl *template.Template, err error) {
 	return tpl, nil
 }
 
+// loadConfig parses the configuration file and does meaningful checks on defined parameters
+// Also sets default values if optional parameters are not set
 func loadConfig(ac *AppConfig) {
+	// config file must parse successfully
 	c, err := goconf.ReadConfigFile(configPath)
-	checkConfigError(err)
+	checkConfigError(err, true)
 
+
+	// read params from [default] section
+        conf_addr, err := c.GetString("default", "listen")
+        checkConfigError(err, false)
+	if err != nil { conf_addr = dflt_conf_addr }
+
+        conf_mux, err := c.GetBool("default", "gorilla-mux")
+        checkConfigError(err, false)
+	if err != nil { conf_mux = dflt_conf_mux }
+
+
+	
+	// read params from [project] section
 	conf_root, err := c.GetString("project", "root")
-	checkConfigError(err)
+	checkConfigError(err, true)
+	if !strings.HasSuffix(conf_root, "/") { conf_root += "/" }
 
-	conf_addr, err := c.GetString("default", "listen")
-	checkConfigError(err)
+        conf_tmpdir, err := c.GetString("project", "tmpDir")
+        checkConfigError(err, false)
+	if err != nil { conf_tmpdir = dflt_conf_tmpdir }
+	if !strings.HasSuffix(conf_tmpdir, "/") { conf_tmpdir += "/" }
 
 	conf_template_path, err := c.GetString("project", "templatePath")
-	checkConfigError(err)
-
-	conf_mux, err := c.GetBool("default", "gorilla-mux")
-	checkConfigError(err)
-
-	conf_tmpdir, err := c.GetString("project", "tmpDir")
-	checkConfigError(err)
-
+	checkConfigError(err, false)
+	if err != nil { conf_template_path = conf_root + "templates/" }
+        if !strings.HasSuffix(conf_template_path, "/") { conf_template_path += "/" }
+	fmt.Println("Template path is: ", conf_template_path)
+	
 	conf_livetpl, err := c.GetBool("project", "live-templates")
-	checkConfigError(err)
+	checkConfigError(err, false)
+	if err != nil { conf_livetpl = dflt_conf_livetpl }
 
-	// check if we have write access to temp dir
-	if strings.HasSuffix(conf_tmpdir, "/") {
-		ac.TempDir = conf_tmpdir
-	} else {
-		ac.TempDir = conf_tmpdir + "/"
-	}
 
-	testpath := ac.TempDir + "go-webproject_tmptest"
+	testpath := conf_tmpdir + "go-webproject_tmptest"
 	if err := os.Mkdir(testpath, 0755); err != nil {
 		fmt.Println("Error with tmp dir configuration:", err.Error())
 		os.Exit(1)
@@ -190,26 +214,25 @@ func loadConfig(ac *AppConfig) {
 	p := strings.TrimSpace(conf_template_path)
 	// check if path exists
 	if _, err := os.Stat(p); err != nil {
-		fmt.Println("Configuration error, template directory does not exist")
+		fmt.Println("Configuration error, template directory does not exist: ", conf_template_path)
 		os.Exit(1)
-	}
-	if strings.HasSuffix(p, "/") {
-		ac.TemplatePath = p
-	} else {
-		ac.TemplatePath = p + "/"
 	}
 
 	ac.ListenAddr = conf_addr
+        ac.Gorilla = conf_mux
+        ac.ProjectRoot = conf_root
 	ac.TempDir = conf_tmpdir
-	ac.ProjectRoot = conf_root
-	ac.Gorilla = conf_mux
+	ac.TemplatePath = conf_template_path
 	ac.LiveTemplates = conf_livetpl
 
 }
 
-func checkConfigError(e error) {
-	if e != nil {
+// checkConfigError checks for configuration errors. If strict parameter is true, 
+// we can't proceed with execution
+func checkConfigError(e error, strict bool) {
+	if e != nil && strict == true {
 		fmt.Println("Config error: ", e.Error())
+		fmt.Println("See examples/config/server.conf for all the options")
 		os.Exit(1)
 	}
 }

@@ -4,16 +4,15 @@ import (
 	"../gorilla/mux/mux"
 	"../gorilla/sessions/sessions"
 	"bytes"
-	"net/http"
 	"fmt"
+	"net/http"
 )
 
 type Example struct {
-	Name string
+	Name     string
 	LoggedIn bool
 	ErrorMsg string
 }
-
 
 // initHandlres defines all the routes for our web application
 func initHandlers(r *mux.Router) {
@@ -31,12 +30,11 @@ func initHandlers(r *mux.Router) {
 	r.HandleFunc("/", indexPage) // otherwise, we would use http.HandleFunc("/", indexPage)
 	r.HandleFunc("/login", loginPage)
 
-		
 }
 
 // checkSession checks for specified session parameter
 // returns true (eg. logged in) if present, false if not
-func checkSession(req *http.Request, param string) (bool) {
+func checkSession(req *http.Request, param string) bool {
 	sess, err := sessions.Session(req)
 	if err != nil {
 		fmt.Println("Session error: ", err.Error())
@@ -47,9 +45,8 @@ func checkSession(req *http.Request, param string) (bool) {
 		return true
 	}
 	return false
-	
-}
 
+}
 
 // indexPage() is a handler which will load some template and send the result back to the client
 func indexPage(writer http.ResponseWriter, req *http.Request) {
@@ -65,22 +62,27 @@ func indexPage(writer http.ResponseWriter, req *http.Request) {
 	// otherwise, we will display login form
 	if checkSession(req, "one") == true {
 		displayContent = true
-	} else { displayContent = false }
-		
-	
+	} else {
+		displayContent = false
+	}
+
 	errmsg := req.FormValue("error")
 	var msg string
 
-	if errmsg == "login" { msg = "Invalid login" } else {
-	if errmsg == "session" { msg = "Session error" } }
-		
+	if errmsg == "login" {
+		msg = "Invalid login"
+	} else {
+		if errmsg == "session" {
+			msg = "Session error"
+		}
+	}
+
 	mydata := Example{Name: "Joe", LoggedIn: displayContent, ErrorMsg: msg}
 	buff := new(bytes.Buffer)
 
 	tpl.Execute(buff, mydata)
 	writer.Write(buff.Bytes())
 }
-
 
 // loginPage authenticates users
 func loginPage(writer http.ResponseWriter, req *http.Request) {
@@ -89,17 +91,16 @@ func loginPage(writer http.ResponseWriter, req *http.Request) {
 	valid_pass := "testp"
 
 	if req.FormValue("user") == valid_user && req.FormValue("pass") == valid_pass {
-		sess, err := sessions.Session(req)			
-		if err!= nil {
+		sess, err := sessions.Session(req)
+		if err != nil {
 			// something went wrong
 			http.Redirect(writer, req, "/?error=session", http.StatusFound)
 			return
 		}
 		sess["one"] = "two" // we set this to indicate we're logged in.
-		sessions.Save(req, writer) 
+		sessions.Save(req, writer)
 		http.Redirect(writer, req, "/", http.StatusFound)
 		return
 	}
 	http.Redirect(writer, req, "/?error=login", http.StatusFound)
 }
-

@@ -1,4 +1,6 @@
 all:
+	gofmt -w src/main.go
+	gofmt -w examples/handlers/handlers.go
 	$(MAKE) -C gorilla/context/
 	$(MAKE) -C gorilla/sessions/
 	$(MAKE) -C gorilla/mux/

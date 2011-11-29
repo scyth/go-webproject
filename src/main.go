@@ -21,10 +21,10 @@ var (
 )
 
 const (
-	dflt_conf_addr = "127.0.0.1:8000"
-	dflt_conf_mux = true
-	dflt_conf_tmpdir = "/tmp/"
-        dflt_conf_livetpl = false
+	dflt_conf_addr    = "127.0.0.1:8000"
+	dflt_conf_mux     = true
+	dflt_conf_tmpdir  = "/tmp/"
+	dflt_conf_livetpl = false
 )
 
 func init() {
@@ -51,7 +51,7 @@ type AppConfig struct {
 	TempDir       string
 	TemplatePath  string
 	LiveTemplates bool
-	LiveMsg	      chan *ParsedTemplate
+	LiveMsg       chan *ParsedTemplate
 	Templates     map[string]*template.Template // keys = relative file path, vals = parsed template objects
 }
 
@@ -84,12 +84,10 @@ func main() {
 	}
 }
 
-
 type ParsedTemplate struct {
 	Name string
 	Tpl  *template.Template
 }
-
 
 // watchTemplates is responsible for template caching
 // and live reloading (if live-templates option is activated)
@@ -132,7 +130,7 @@ func watchTemplates() {
 				}
 			}
 		}
-	// we're just preloading/caching templates. No runtime updates are possible.
+		// we're just preloading/caching templates. No runtime updates are possible.
 	} else {
 
 		for {
@@ -141,15 +139,13 @@ func watchTemplates() {
 		}
 	}
 
-
 }
-
 
 // LoadTemplate is API call which will return parsed template object, and will do this fast.
 // It is also thread safe
 func LoadTemplate(name string) (tpl *template.Template, err error) {
-	if ac.Templates[ac.TemplatePath + name] != nil {
-		return ac.Templates[ac.TemplatePath + name], nil
+	if ac.Templates[ac.TemplatePath+name] != nil {
+		return ac.Templates[ac.TemplatePath+name], nil
 	}
 
 	tpl, err = template.ParseFile(ac.TemplatePath + name)
@@ -170,38 +166,50 @@ func loadConfig(ac *AppConfig) {
 	c, err := goconf.ReadConfigFile(configPath)
 	checkConfigError(err, true)
 
-
 	// read params from [default] section
-        conf_addr, err := c.GetString("default", "listen")
-        checkConfigError(err, false)
-	if err != nil { conf_addr = dflt_conf_addr }
+	conf_addr, err := c.GetString("default", "listen")
+	checkConfigError(err, false)
+	if err != nil {
+		conf_addr = dflt_conf_addr
+	}
 
-        conf_mux, err := c.GetBool("default", "gorilla-mux")
-        checkConfigError(err, false)
-	if err != nil { conf_mux = dflt_conf_mux }
+	conf_mux, err := c.GetBool("default", "gorilla-mux")
+	checkConfigError(err, false)
+	if err != nil {
+		conf_mux = dflt_conf_mux
+	}
 
-
-	
 	// read params from [project] section
 	conf_root, err := c.GetString("project", "root")
 	checkConfigError(err, true)
-	if !strings.HasSuffix(conf_root, "/") { conf_root += "/" }
+	if !strings.HasSuffix(conf_root, "/") {
+		conf_root += "/"
+	}
 
-        conf_tmpdir, err := c.GetString("project", "tmpDir")
-        checkConfigError(err, false)
-	if err != nil { conf_tmpdir = dflt_conf_tmpdir }
-	if !strings.HasSuffix(conf_tmpdir, "/") { conf_tmpdir += "/" }
+	conf_tmpdir, err := c.GetString("project", "tmpDir")
+	checkConfigError(err, false)
+	if err != nil {
+		conf_tmpdir = dflt_conf_tmpdir
+	}
+	if !strings.HasSuffix(conf_tmpdir, "/") {
+		conf_tmpdir += "/"
+	}
 
 	conf_template_path, err := c.GetString("project", "templatePath")
 	checkConfigError(err, false)
-	if err != nil { conf_template_path = conf_root + "templates/" }
-        if !strings.HasSuffix(conf_template_path, "/") { conf_template_path += "/" }
+	if err != nil {
+		conf_template_path = conf_root + "templates/"
+	}
+	if !strings.HasSuffix(conf_template_path, "/") {
+		conf_template_path += "/"
+	}
 	fmt.Println("Template path is: ", conf_template_path)
-	
+
 	conf_livetpl, err := c.GetBool("project", "live-templates")
 	checkConfigError(err, false)
-	if err != nil { conf_livetpl = dflt_conf_livetpl }
-
+	if err != nil {
+		conf_livetpl = dflt_conf_livetpl
+	}
 
 	testpath := conf_tmpdir + "go-webproject_tmptest"
 	if err := os.Mkdir(testpath, 0755); err != nil {
@@ -219,8 +227,8 @@ func loadConfig(ac *AppConfig) {
 	}
 
 	ac.ListenAddr = conf_addr
-        ac.Gorilla = conf_mux
-        ac.ProjectRoot = conf_root
+	ac.Gorilla = conf_mux
+	ac.ProjectRoot = conf_root
 	ac.TempDir = conf_tmpdir
 	ac.TemplatePath = conf_template_path
 	ac.LiveTemplates = conf_livetpl

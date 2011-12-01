@@ -10,7 +10,7 @@ endif
 
 
 all:
-	$(EXT)g -o sessions.$(EXT) sessions.go doc.go
+	$(EXT)g -o sessions.$(EXT) sessions.go sessions_addon.go filestore.go doc.go
 
 clean:
 	

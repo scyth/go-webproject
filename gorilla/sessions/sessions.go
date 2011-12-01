@@ -451,6 +451,7 @@ func sessionKeys(vars ...string) (string, string) {
 type SessionStore interface {
 	Load(r *http.Request, key string, info *SessionInfo)
 	Save(r *http.Request, w http.ResponseWriter, key string, info *SessionInfo) (bool, error)
+        Init(r *http.Request, w http.ResponseWriter, key string, info *SessionInfo) (bool, error)
 	Encoders() []SessionEncoder
 	SetEncoders(encoders ...SessionEncoder)
 }

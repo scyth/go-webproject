@@ -7,10 +7,10 @@ import (
 	"exp/inotify"
 	"flag"
 	"fmt"
+	"html/template"
 	"net/http"
 	"os"
 	"strings"
-	"text/template"
 )
 
 var (
@@ -39,8 +39,8 @@ func init() {
 	router = new(mux.Router)
 
 	WatchList = make(map[string]bool)
-
-	sessions.SetStoreKeys("cookie", []byte("my-simple-key-hmac"))
+	sessions.SetStore("filestore", new(sessions.FileSessionStore))
+	sessions.SetStoreKeys("filestore", []byte("my-simple-key-hmac"))
 
 }
 

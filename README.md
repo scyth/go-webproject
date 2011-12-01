@@ -7,12 +7,12 @@ It compiles with the latest weekly release of Go, so keep your code up2date! I t
 
 ### Features
 
-* text/template package from standard go library is used
-* template caching is in place
-* (optional) on the fly template reloading without need to restart the service
-* (optional) integrated mux package from gorilla project for advanced routing and easier request handling
-* integrated sessions package from gorilla project for session management
-* external configuration file for server and app settings
+* html/template package from standard go library is used, for consistency and security reasons.
+* template caching is in place.
+* (optional) on the fly template reloading without need to restart the service.
+* (optional) integrated mux package from gorilla project for advanced routing and easier request handling.
+* integrated sessions package from gorilla project for session management.
+* external configuration file for server and app settings.
 
 
 ### References

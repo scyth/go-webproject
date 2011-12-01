@@ -2,7 +2,7 @@ Go-WebProject
 =============
 
 A lightweight toolkit/framework to get you started with web programming in Go.
-It compiles with the latest weekly release of Go, so keep your code up2date! I tend to keep it this way until Go v1 comes out in a month or two.
+It compiles with the latest weekly release of Go(weekly.2011-12-01), so keep your code up2date! I tend to keep it this way until Go v1 comes out in a month or two.
 
 
 ### Features

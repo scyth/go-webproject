@@ -726,7 +726,7 @@ func (s *Encoder) Decode(key, value string) (SessionData, error) {
 // overridden. If TimeFunc is not set, it will return time.UTC().Seconds().
 func (s *Encoder) timestamp() int64 {
 	if s.TimeFunc == nil {
-		return time.UTC().Seconds()
+		return time.Now().UTC().Unix()
 	}
 	return s.TimeFunc()
 }

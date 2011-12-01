@@ -148,7 +148,7 @@ func LoadTemplate(name string) (tpl *template.Template, err error) {
 		return ac.Templates[ac.TemplatePath+name], nil
 	}
 
-	tpl, err = template.ParseFile(ac.TemplatePath + name)
+	tpl, err = template.ParseFiles(ac.TemplatePath + name)
 	if err != nil {
 		fmt.Println("Error loading template", err.Error())
 		return nil, err

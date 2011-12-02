@@ -867,7 +867,7 @@ func verifyHmac(h hash.Hash, key string, value []byte, timestamp, minAge,
 func mac(h hash.Hash, key string, value []byte, timestamp int64) []byte {
 	h.Reset()
 	h.Write([]byte(fmt.Sprintf("%s|%s|%d", key, value, timestamp)))
-	return h.Sum()
+	return h.Sum([]byte(fmt.Sprintf("%s|%s|%d", key, value, timestamp)))
 }
 
 // Encoding -------------------------------------------------------------------

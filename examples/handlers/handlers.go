@@ -1,8 +1,8 @@
 package main
 
 import (
-	"../gorilla/mux/mux"
-	"../gorilla/sessions/sessions"
+	"gwp/gorilla/mux"
+	"gwp/modules/gorilla/sessions"
 	"bytes"
 	"fmt"
 	"net/http"

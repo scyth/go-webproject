@@ -1,9 +1,9 @@
 package main
 
 import (
-	"../goconf/goconf"
-	"../gorilla/mux/mux"
-	"../gorilla/sessions/sessions"
+	"gwp/goconf"
+	"gwp/gorilla/mux"
+	"gwp/modules/gorilla/sessions"
 	"exp/inotify"
 	"flag"
 	"fmt"

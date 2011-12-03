@@ -5,7 +5,7 @@
 package sessions
 
 import (
-	"../context/context"
+	"gwp/gorilla/context"
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"

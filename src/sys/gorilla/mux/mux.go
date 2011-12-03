@@ -5,11 +5,10 @@
 package mux
 
 import (
-	"../context/context"
+	"gwp/gorilla/context"
 	"bytes"
 	"errors"
 	"fmt"
-
 	"net/http"
 	"net/url"
 	"path"

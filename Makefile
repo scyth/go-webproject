@@ -1,18 +1,16 @@
+GWPROOT := $(shell pwd)
+export
+include ./Make.inc
+
 all:
-	gofmt -w src/main.go
-	gofmt -w examples/handlers/handlers.go
-	$(MAKE) -C gorilla/context/
-	$(MAKE) -C gorilla/sessions/
-	$(MAKE) -C gorilla/mux/
-	$(MAKE)	-C goconf/
-	$(MAKE) -C src/
+	$(MAKE) -C src/sys/
+	$(MAKE) -C src/modules/
+	$(EXT)g -o build/$(TARGET).$(EXT) -I $(INCPATH) src/sys/main.go src/handlers.go
+	$(EXT)l -o $(TARGET) -L $(INCPATH) build/$(TARGET).$(EXT)	
 
 clean:
-	rm -f ./runserver
+	$(MAKE) -C src/sys/ clean
+	$(MAKE) -C src/modules/ clean
+	rm -f build/$(TARGET).$(EXT) $(TARGET)
 	find ./ -name "*~" | xargs rm -f
-	find ./ -name "_go_.*" | xargs rm -f
-	$(MAKE) -C gorilla/context/ clean
-	$(MAKE) -C gorilla/sessions/ clean
-	$(MAKE) -C gorilla/mux/ clean
-	$(MAKE) -C goconf/ clean
 

@@ -11,10 +11,10 @@ endif
 
 
 all:
-	mkdir -p $(SYSPATH)/gorilla
+	mkdir -p $(SYSPATH)/libs/gorilla
 	$(EXT)g -o _go_.6 context.go doc.go
-	gopack grc $(SYSPATH)/gorilla/context.a _go_.$(EXT)
+	gopack grc $(SYSPATH)/libs/gorilla/context.a _go_.$(EXT)
 
 clean:
-	rm -f $(SYSPATH)/gorilla/context.a
+	rm -f $(SYSPATH)/libs/gorilla/context.a
 	rm -f _go_.$(EXT)

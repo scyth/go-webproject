@@ -5,7 +5,7 @@
 package mux
 
 import (
-	"gwp/gorilla/context"
+	"gwp/libs/gorilla/context"
 	"bytes"
 	"errors"
 	"fmt"

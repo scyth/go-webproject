@@ -11,13 +11,13 @@ endif
 
 
 all:
-	mkdir -p $(SYSPATH)/gorilla
+	mkdir -p $(SYSPATH)/libs/gorilla
 	$(EXT)g -o _go_.$(EXT) -I $(INCPATH) mux.go doc.go
-	gopack grc $(SYSPATH)/gorilla/mux.a _go_.$(EXT)
+	gopack grc $(SYSPATH)/libs/gorilla/mux.a _go_.$(EXT)
 
 clean:
 	
-	rm -f $(SYSPATH)/gorilla/mux.a
+	rm -f $(SYSPATH)/libs/gorilla/mux.a
 	rm -f _go_.$(EXT)
 		
 	

@@ -1,4 +1,4 @@
-include ../../Make.inc
+include $(GWPROOT)/Make.inc
 
 DIRS=\
 	libs/goconf\
@@ -27,7 +27,7 @@ clean.dirs: $(addsuffix .clean, $(DIRS))
 		
 %.clean:
 	$(MAKE) -C $* clean
-	rm -f ./_*.$(EXT)
+	find ./ -name "_go.$(EXT)" | xargs rm -f 
 	
 install: install.dirs
 clean: clean.dirs

@@ -18,6 +18,7 @@ It compiles with the latest weekly release of Go(weekly.2011-12-02), so keep you
 ### References
 
 * Check out http://go-webproject.appspot.com/ for more documentation about internal packages
+* or you can run ` godoc src/gwp ` to browse package documentation
 
 
 ### Notes

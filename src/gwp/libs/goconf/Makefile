@@ -1,4 +1,4 @@
-include ../../../Make.inc
+include ../../../../Make.inc
 
 all:
 	mkdir -p $(SYSPATH)

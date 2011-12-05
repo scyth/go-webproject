@@ -8,8 +8,8 @@ import (
 // Load is API call which will return parsed template object, and will do this fast.
 // It is also thread safe
 func Load(ctx *gwp_context.Context, name string) (tpl *template.Template, err error) {
-	if ctx.App.Templates[ctx.App.TemplatePath+name] != nil {
-		return ctx.App.Templates[ctx.App.TemplatePath+name], nil
+	if ctx.Templates[ctx.App.TemplatePath+name] != nil {
+		return ctx.Templates[ctx.App.TemplatePath+name], nil
 	}
 
 	tpl, err = template.ParseFiles(ctx.App.TemplatePath + name)

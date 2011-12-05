@@ -1,4 +1,4 @@
-include ../../../Make.inc
+include $(GWPROOT)/Make.inc
 
 all:
 	mkdir -p $(MODPATH)/gorilla

@@ -3,15 +3,15 @@ export
 include ./Make.inc
 
 all:
-	$(MAKE) -C src/sys/
-	$(MAKE) -C src/modules/
+	$(MAKE) -C src/gwp/
+	$(MAKE) -C src/gwp/modules/
 	
-	$(EXT)g -o build/$(TARGET).$(EXT) -I $(INCPATH) src/sys/main.go src/handlers.go
+	$(EXT)g -o build/$(TARGET).$(EXT) -I $(INCPATH) src/cmd/main.go src/handlers.go
 	$(EXT)l -o $(TARGET) -L $(INCPATH) build/$(TARGET).$(EXT)	
 
 clean:
-	$(MAKE) -C src/sys/ clean
-	$(MAKE) -C src/modules/ clean
-	rm -f build/$(TARGET).$(EXT) $(TARGET)
-	rm -f build/gwp/*.a
+	$(MAKE) -C src/gwp/ clean
+	$(MAKE) -C src/gwp/modules/ clean
+	rm -rf build/*
+	rm -f ./runserver
 	find ./ -name "*~" | xargs rm -f

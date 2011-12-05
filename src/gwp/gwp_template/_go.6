@@ -1,0 +1,288 @@
+go object linux amd64 weekly.2011-12-02 10652 X:none
+  exports automatically generated from
+  gwp_template/doc.go in package "gwp_template"
+
+$$  // exports
+    package gwp_template
+	import gwp_context "gwp/gwp_context"
+	import runtime "runtime"
+	import template "html/template"
+	import template "text/template" // indirect
+	import parse "text/template/parse" // indirect
+	type @"text/template/parse".NodeType int
+	func (t @"text/template/parse".NodeType) Type() @"text/template/parse".NodeType
+	type @"text/template/parse".Node interface { String() string; Type() @"text/template/parse".NodeType }
+	type @"text/template/parse".ListNode struct { ? @"text/template/parse".NodeType; Nodes []@"text/template/parse".Node }
+	func (l *@"text/template/parse".ListNode "noescape") String() string
+	func (l *@"text/template/parse".ListNode "noescape") append(n @"text/template/parse".Node)
+	type @"text/template/parse".stateFn func(? *@"text/template/parse".lexer) @"text/template/parse".stateFn
+	type @"text/template/parse".itemType int
+	func (i @"text/template/parse".itemType) String() string
+	type @"text/template/parse".item struct { typ @"text/template/parse".itemType; val string }
+	func (i @"text/template/parse".item) String() string
+	type @"text/template/parse".lexer struct { name string; input string; leftDelim string; rightDelim string; state @"text/template/parse".stateFn; pos int; start int; width int; items chan @"text/template/parse".item }
+	func (l *@"text/template/parse".lexer "noescape") accept(valid string "noescape") bool
+	func (l *@"text/template/parse".lexer "noescape") acceptRun(valid string "noescape")
+	func (l *@"text/template/parse".lexer "noescape") backup()
+	func (l *@"text/template/parse".lexer "noescape") emit(t @"text/template/parse".itemType)
+	func (l *@"text/template/parse".lexer "noescape") errorf(format string "noescape", args ...interface {} "noescape") @"text/template/parse".stateFn
+	func (l *@"text/template/parse".lexer "noescape") ignore()
+	func (l *@"text/template/parse".lexer "noescape") lineNumber() int
+	func (l *@"text/template/parse".lexer "noescape") next() rune
+	func (l *@"text/template/parse".lexer) nextItem() @"text/template/parse".item
+	func (l *@"text/template/parse".lexer "noescape") peek() rune
+	func (l *@"text/template/parse".lexer "noescape") scanNumber() bool
+	type @"text/template/parse".CommandNode struct { ? @"text/template/parse".NodeType; Args []@"text/template/parse".Node }
+	func (c *@"text/template/parse".CommandNode "noescape") String() string
+	func (c *@"text/template/parse".CommandNode "noescape") append(arg @"text/template/parse".Node)
+	type @"text/template/parse".VariableNode struct { ? @"text/template/parse".NodeType; Ident []string }
+	func (v *@"text/template/parse".VariableNode "noescape") String() string
+	type @"text/template/parse".PipeNode struct { ? @"text/template/parse".NodeType; Line int; Decl []*@"text/template/parse".VariableNode; Cmds []*@"text/template/parse".CommandNode }
+	func (p *@"text/template/parse".PipeNode "noescape") String() string
+	func (p *@"text/template/parse".PipeNode "noescape") append(command *@"text/template/parse".CommandNode)
+	type @"text/template/parse".Tree struct { Name string; Root *@"text/template/parse".ListNode; funcs []map[string] interface {}; lex *@"text/template/parse".lexer; token [2]@"text/template/parse".item; peekCount int; vars []string }
+	func (t *@"text/template/parse".Tree) Parse(s string, leftDelim string, rightDelim string, treeSet map[string] *@"text/template/parse".Tree "noescape", funcs ...map[string] interface {}) (tree *@"text/template/parse".Tree, err error)
+	func (t *@"text/template/parse".Tree "noescape") action() @"text/template/parse".Node
+	func (t *@"text/template/parse".Tree) add(treeSet map[string] *@"text/template/parse".Tree "noescape")
+	func (t *@"text/template/parse".Tree "noescape") atEOF() bool
+	func (t *@"text/template/parse".Tree "noescape") backup()
+	func (t *@"text/template/parse".Tree "noescape") backup2(t1 @"text/template/parse".item)
+	func (t *@"text/template/parse".Tree "noescape") command() *@"text/template/parse".CommandNode
+	func (t *@"text/template/parse".Tree "noescape") elseControl() @"text/template/parse".Node
+	func (t *@"text/template/parse".Tree "noescape") endControl() @"text/template/parse".Node
+	func (t *@"text/template/parse".Tree "noescape") error(err error)
+	func (t *@"text/template/parse".Tree "noescape") errorf(format string, args ...interface {} "noescape")
+	func (t *@"text/template/parse".Tree "noescape") expect(expected @"text/template/parse".itemType, context string) @"text/template/parse".item
+	func (t *@"text/template/parse".Tree "noescape") expectOneOf(expected1 @"text/template/parse".itemType, expected2 @"text/template/parse".itemType, context string) @"text/template/parse".item
+	func (t *@"text/template/parse".Tree "noescape") hasFunction(name string "noescape") bool
+	func (t *@"text/template/parse".Tree "noescape") ifControl() @"text/template/parse".Node
+	func (t *@"text/template/parse".Tree "noescape") itemList() (list *@"text/template/parse".ListNode, next @"text/template/parse".Node)
+	func (t *@"text/template/parse".Tree "noescape") next() @"text/template/parse".item
+	func (t *@"text/template/parse".Tree "noescape") parse(treeSet map[string] *@"text/template/parse".Tree "noescape") @"text/template/parse".Node
+	func (t *@"text/template/parse".Tree "noescape") parseControl(context string) (lineNum int, pipe *@"text/template/parse".PipeNode, list *@"text/template/parse".ListNode, elseList *@"text/template/parse".ListNode)
+	func (t *@"text/template/parse".Tree) parseDefinition(treeSet map[string] *@"text/template/parse".Tree "noescape")
+	func (t *@"text/template/parse".Tree "noescape") peek() @"text/template/parse".item
+	func (t *@"text/template/parse".Tree "noescape") pipeline(context string) *@"text/template/parse".PipeNode
+	func (t *@"text/template/parse".Tree "noescape") popVars(n int)
+	func (t *@"text/template/parse".Tree "noescape") rangeControl() @"text/template/parse".Node
+	func (t *@"text/template/parse".Tree "noescape") recover(errp *error "noescape")
+	func (t *@"text/template/parse".Tree "noescape") startParse(funcs []map[string] interface {}, lex *@"text/template/parse".lexer)
+	func (t *@"text/template/parse".Tree "noescape") stopParse()
+	func (t *@"text/template/parse".Tree "noescape") templateControl() @"text/template/parse".Node
+	func (t *@"text/template/parse".Tree "noescape") textOrAction() @"text/template/parse".Node
+	func (t *@"text/template/parse".Tree "noescape") unexpected(token @"text/template/parse".item, context string)
+	func (t *@"text/template/parse".Tree "noescape") useVar(name string "noescape") @"text/template/parse".Node
+	func (t *@"text/template/parse".Tree "noescape") withControl() @"text/template/parse".Node
+	type @"text/template".FuncMap map[string] interface {}
+	import reflect "reflect" // indirect
+	type @"runtime".Type interface {}
+	type @"reflect".method struct { name *string; pkgPath *string; mtyp *@"runtime".Type; typ *@"runtime".Type; ifn @"unsafe".Pointer; tfn @"unsafe".Pointer }
+	type @"reflect".ChanDir int
+	func (d @"reflect".ChanDir) String() string
+	type @"reflect".StructTag string
+	func (tag @"reflect".StructTag "noescape") Get(key string "noescape") string
+	type @"reflect".StructField struct { PkgPath string; Name string; Type @"reflect".Type; Tag @"reflect".StructTag; Offset uintptr; Index []int; Anonymous bool }
+	type @"reflect".Kind uint
+	func (k @"reflect".Kind) String() string
+	type @"reflect".Type interface { Align() int; AssignableTo(u @"reflect".Type) bool; Bits() int; ChanDir() @"reflect".ChanDir; Elem() @"reflect".Type; Field(i int) @"reflect".StructField; FieldAlign() int; FieldByIndex(index []int) @"reflect".StructField; FieldByName(name string) (? @"reflect".StructField, ? bool); FieldByNameFunc(match func(? string) bool) (? @"reflect".StructField, ? bool); Implements(u @"reflect".Type) bool; In(i int) @"reflect".Type; IsVariadic() bool; Key() @"reflect".Type; Kind() @"reflect".Kind; Len() int; Method(? int) @"reflect".Method; MethodByName(? string) (? @"reflect".Method, ? bool); Name() string; NumField() int; NumIn() int; NumMethod() int; NumOut() int; Out(i int) @"reflect".Type; PkgPath() string; Size() uintptr; String() string; @"reflect".common() *@"reflect".commonType; @"reflect".runtimeType() *@"runtime".Type; @"reflect".uncommon() *@"reflect".uncommonType }
+	type @"reflect".Method struct { PkgPath string; Name string; Type @"reflect".Type; Func @"reflect".Value; Index int }
+	type @"reflect".uncommonType struct { name *string; pkgPath *string; methods []@"reflect".method }
+	func (t *@"reflect".uncommonType "noescape") Method(i int) @"reflect".Method
+	func (t *@"reflect".uncommonType "noescape") MethodByName(name string "noescape") (m @"reflect".Method, ok bool)
+	func (t *@"reflect".uncommonType "noescape") Name() string
+	func (t *@"reflect".uncommonType "noescape") NumMethod() int
+	func (t *@"reflect".uncommonType "noescape") PkgPath() string
+	func (t *@"reflect".uncommonType) uncommon() *@"reflect".uncommonType
+	type @"reflect".commonType struct { size uintptr; hash uint32; alg uint8; align uint8; fieldAlign uint8; kind uint8; string *string; ? *@"reflect".uncommonType; ptrToThis *@"runtime".Type }
+	func (t *@"reflect".commonType "noescape") Align() int
+	func (t *@"reflect".commonType "noescape") AssignableTo(u @"reflect".Type "noescape") bool
+	func (t *@"reflect".commonType "noescape") Bits() int
+	func (t *@"reflect".commonType "noescape") ChanDir() @"reflect".ChanDir
+	func (t *@"reflect".commonType "noescape") Elem() @"reflect".Type
+	func (t *@"reflect".commonType "noescape") Field(i int) @"reflect".StructField
+	func (t *@"reflect".commonType "noescape") FieldAlign() int
+	func (t *@"reflect".commonType) FieldByIndex(index []int "noescape") @"reflect".StructField
+	func (t *@"reflect".commonType) FieldByName(name string "noescape") (? @"reflect".StructField, ? bool)
+	func (t *@"reflect".commonType) FieldByNameFunc(match func(? string) bool "noescape") (? @"reflect".StructField, ? bool)
+	func (t *@"reflect".commonType "noescape") Implements(u @"reflect".Type) bool
+	func (t *@"reflect".commonType "noescape") In(i int) @"reflect".Type
+	func (t *@"reflect".commonType "noescape") IsVariadic() bool
+	func (t *@"reflect".commonType "noescape") Key() @"reflect".Type
+	func (t *@"reflect".commonType "noescape") Kind() @"reflect".Kind
+	func (t *@"reflect".commonType "noescape") Len() int
+	func (t *@"reflect".commonType "noescape") Method(i int) @"reflect".Method
+	func (t *@"reflect".commonType "noescape") MethodByName(name string "noescape") (m @"reflect".Method, ok bool)
+	func (t *@"reflect".commonType "noescape") Name() string
+	func (t *@"reflect".commonType "noescape") NumField() int
+	func (t *@"reflect".commonType "noescape") NumIn() int
+	func (t *@"reflect".commonType "noescape") NumMethod() int
+	func (t *@"reflect".commonType "noescape") NumOut() int
+	func (t *@"reflect".commonType "noescape") Out(i int) @"reflect".Type
+	func (t *@"reflect".commonType "noescape") PkgPath() string
+	func (t *@"reflect".commonType "noescape") Size() uintptr
+	func (t *@"reflect".commonType "noescape") String() string
+	func (t *@"reflect".commonType) common() *@"reflect".commonType
+	func (ct *@"reflect".commonType) ptrTo() *@"reflect".commonType
+	func (t *@"reflect".commonType) runtimeType() *@"runtime".Type
+	func (t *@"reflect".commonType) toType() @"reflect".Type
+	type @"reflect".flag uintptr
+	func (f @"reflect".flag) kind() @"reflect".Kind
+	func (f @"reflect".flag) mustBe(expected @"reflect".Kind)
+	func (f @"reflect".flag) mustBeAssignable()
+	func (f @"reflect".flag) mustBeExported()
+	type @"reflect".iword @"unsafe".Pointer
+	type @"reflect".Value struct { typ *@"reflect".commonType; val @"unsafe".Pointer; ? @"reflect".flag }
+	func (v @"reflect".Value) Addr() @"reflect".Value
+	func (v @"reflect".Value) Bool() bool
+	func (v @"reflect".Value) Bytes() []byte
+	func (v @"reflect".Value) Call(in []@"reflect".Value "noescape") []@"reflect".Value
+	func (v @"reflect".Value) CallSlice(in []@"reflect".Value "noescape") []@"reflect".Value
+	func (v @"reflect".Value "noescape") CanAddr() bool
+	func (v @"reflect".Value "noescape") CanInterface() bool
+	func (v @"reflect".Value "noescape") CanSet() bool
+	func (v @"reflect".Value) Cap() int
+	func (v @"reflect".Value) Close()
+	func (v @"reflect".Value) Complex() complex128
+	func (v @"reflect".Value) Elem() @"reflect".Value
+	func (v @"reflect".Value) Field(i int) @"reflect".Value
+	func (v @"reflect".Value) FieldByIndex(index []int "noescape") @"reflect".Value
+	func (v @"reflect".Value) FieldByName(name string "noescape") @"reflect".Value
+	func (v @"reflect".Value) FieldByNameFunc(match func(? string) bool "noescape") @"reflect".Value
+	func (v @"reflect".Value) Float() float64
+	func (v @"reflect".Value) Index(i int) @"reflect".Value
+	func (v @"reflect".Value) Int() int64
+	func (v @"reflect".Value) Interface() interface {}
+	func (v @"reflect".Value) InterfaceData() [2]uintptr
+	func (v @"reflect".Value) IsNil() bool
+	func (v @"reflect".Value "noescape") IsValid() bool
+	func (v @"reflect".Value) Kind() @"reflect".Kind
+	func (v @"reflect".Value) Len() int
+	func (v @"reflect".Value) MapIndex(key @"reflect".Value) @"reflect".Value
+	func (v @"reflect".Value) MapKeys() []@"reflect".Value
+	func (v @"reflect".Value) Method(i int) @"reflect".Value
+	func (v @"reflect".Value) MethodByName(name string "noescape") @"reflect".Value
+	func (v @"reflect".Value) NumField() int
+	func (v @"reflect".Value "noescape") NumMethod() int
+	func (v @"reflect".Value) OverflowComplex(x complex128 "noescape") bool
+	func (v @"reflect".Value) OverflowFloat(x float64) bool
+	func (v @"reflect".Value) OverflowInt(x int64) bool
+	func (v @"reflect".Value) OverflowUint(x uint64) bool
+	func (v @"reflect".Value) Pointer() uintptr
+	func (v @"reflect".Value) Recv() (x @"reflect".Value, ok bool)
+	func (v @"reflect".Value) Send(x @"reflect".Value)
+	func (v @"reflect".Value) Set(x @"reflect".Value)
+	func (v @"reflect".Value) SetBool(x bool)
+	func (v @"reflect".Value) SetBytes(x []byte)
+	func (v @"reflect".Value) SetComplex(x complex128)
+	func (v @"reflect".Value) SetFloat(x float64)
+	func (v @"reflect".Value) SetInt(x int64)
+	func (v @"reflect".Value) SetLen(n int)
+	func (v @"reflect".Value) SetMapIndex(key @"reflect".Value, val @"reflect".Value)
+	func (v @"reflect".Value) SetPointer(x @"unsafe".Pointer)
+	func (v @"reflect".Value) SetString(x string)
+	func (v @"reflect".Value) SetUint(x uint64)
+	func (v @"reflect".Value) Slice(beg int, end int) @"reflect".Value
+	func (v @"reflect".Value) String() string
+	func (v @"reflect".Value) TryRecv() (x @"reflect".Value, ok bool)
+	func (v @"reflect".Value) TrySend(x @"reflect".Value) bool
+	func (v @"reflect".Value) Type() @"reflect".Type
+	func (v @"reflect".Value) Uint() uint64
+	func (v @"reflect".Value) UnsafeAddr() uintptr
+	func (v @"reflect".Value) assignTo(context string "noescape", dst *@"reflect".commonType, target *interface {}) @"reflect".Value
+	func (v @"reflect".Value) call(method string "noescape", in []@"reflect".Value "noescape") []@"reflect".Value
+	func (v @"reflect".Value) iword() @"reflect".iword
+	func (v @"reflect".Value) recv(nb bool) (val @"reflect".Value, ok bool)
+	func (v @"reflect".Value) send(x @"reflect".Value, nb bool) bool
+	type @"text/template".common struct { tmpl map[string] *@"text/template".Template; parseFuncs @"text/template".FuncMap; execFuncs map[string] @"reflect".Value }
+	import io "io" // indirect
+	type @"io".Writer interface { Write(p []byte) (n int, err error) }
+	type @"text/template".Template struct { name string; ? *@"text/template/parse".Tree; ? *@"text/template".common; leftDelim string; rightDelim string }
+	func (t *@"text/template".Template) AddParseTree(name string, tree *@"text/template/parse".Tree) (? *@"text/template".Template, ? error)
+	func (t *@"text/template".Template) Clone() *@"text/template".Template
+	func (t *@"text/template".Template) Delims(left string, right string) *@"text/template".Template
+	func (t *@"text/template".Template) Execute(wr @"io".Writer, data interface {}) error
+	func (t *@"text/template".Template "noescape") ExecuteTemplate(wr @"io".Writer, name string, data interface {}) error
+	func (t *@"text/template".Template) Funcs(funcMap @"text/template".FuncMap "noescape") *@"text/template".Template
+	func (t *@"text/template".Template "noescape") Lookup(name string "noescape") *@"text/template".Template
+	func (t *@"text/template".Template "noescape") Name() string
+	func (t *@"text/template".Template) New(name string) *@"text/template".Template
+	func (t *@"text/template".Template) Parse(text string) (? *@"text/template".Template, ? error)
+	func (t *@"text/template".Template) ParseFiles(filenames ...string "noescape") (? *@"text/template".Template, ? error)
+	func (t *@"text/template".Template) ParseGlob(pattern string) (? *@"text/template".Template, ? error)
+	func (t *@"text/template".Template "noescape") Templates() []*@"text/template".Template
+	func (t *@"text/template".Template "noescape") associate(new *@"text/template".Template) error
+	func (t *@"text/template".Template) copy(c *@"text/template".common) *@"text/template".Template
+	func (t *@"text/template".Template "noescape") init()
+	import sync "sync" // indirect
+	type @"sync".Mutex struct { state int32; sema uint32 }
+	func (m *@"sync".Mutex) Lock()
+	func (m *@"sync".Mutex) Unlock()
+	type @"html/template".nameSpace struct { mu @"sync".Mutex; set map[string] *@"html/template".Template }
+	type @"html/template".Template struct { escaped bool; text *@"text/template".Template; ? *@"html/template".nameSpace }
+	func (t *@"html/template".Template "noescape") AddParseTree(name string "noescape", tree *@"text/template/parse".Tree "noescape") error
+	func (t *@"html/template".Template "noescape") Clone(name string "noescape") error
+	func (t *@"html/template".Template) Delims(left string, right string) *@"html/template".Template
+	func (t *@"html/template".Template) Execute(wr @"io".Writer, data interface {}) error
+	func (t *@"html/template".Template "noescape") ExecuteTemplate(wr @"io".Writer, name string, data interface {}) error
+	func (t *@"html/template".Template) Funcs(funcMap @"text/template".FuncMap "noescape") *@"html/template".Template
+	func (t *@"html/template".Template "noescape") Lookup(name string "noescape") *@"html/template".Template
+	func (t *@"html/template".Template "noescape") Name() string
+	func (t *@"html/template".Template) New(name string) *@"html/template".Template
+	func (t *@"html/template".Template) Parse(src string) (? *@"html/template".Template, ? error)
+	func (t *@"html/template".Template) ParseFiles(filenames ...string "noescape") (? *@"html/template".Template, ? error)
+	func (t *@"html/template".Template) ParseGlob(pattern string) (? *@"html/template".Template, ? error)
+	func (t *@"html/template".Template) new(name string) *@"html/template".Template
+	type @"gwp/gwp_context".ParsedTemplate struct { Name string; Tpl *@"html/template".Template }
+	type @"gwp/gwp_context".AppConfig struct { ListenAddr string; Mux string; ProjectRoot string; TempDir string; TemplatePath string; LiveTemplates bool }
+	type @"gwp/gwp_context".Context struct { ConfigFile string; LiveTplMsg chan *@"gwp/gwp_context".ParsedTemplate; ErrorMsg chan error; App *@"gwp/gwp_context".AppConfig; Templates map[string] *@"html/template".Template }
+	func @"".Load(ctx *@"gwp/gwp_context".Context "noescape", name string "noescape") (tpl *@"html/template".Template, err error)
+	var @"".initdoneÂ· uint8
+	func @"".init()
+
+$$  // local types
+
+$$
+
+!
+„ y</ „ y<home „ y<scyth „ y<dev „ y<go-webproject „ y<src „ y<gwp „ y<gwp_template „ y<gwp_template.go 8      „ y<gwp „ y<gwp_context.a 8     ÿÿÿÿu„ y<html „ y<template.a 8     ÿÿÿÿu8      „ y</ „ y<home „ y<scyth „ y<dev „ y<go-webproject „ y<src „ y<gwp „ y<gwp_template „ y<doc.go 8      8      „ q"".Load „ qtype.func(*gwp/gwp_context.Context, string) (*html/template.Template, error) ã 
+   ‘qE`   0   u„ t"".err „ qtype.error ®
+   u•    t®
+   u•(   t„ qtype.*html/template.Template ®
+   ur       u„ t"".ctx „ qtype.*gwp/gwp_context.Context ®   ‘t®       š   @   u«      ²     ²     «      „ t"".name „ q	type.string ®   •   t	®   r    •   t	r       „ q
+runtime.concatstring „ qtype.func(int, string, string) string      ‘
+q«   (   „ runtime.key «      ²     ²     „ qtype.map[string] *html/template.Template „ qtype.uint8 „ runtime.mapType ®   “q x®   ‘t®   (   „ runtime.hmap ®      „ qruntime.mapaccess1 „ qtype.func(*uint8, map[string] *html/template.Template, string) *html/template.Template      ‘q®   ‘t®   •   t	r    •   t	®       ®   u¢   Q     9   pr       u®       ‘š   @   u«      ²     ²     «      ®   Žr       Ž     ‘
+q«   (   «      ²     ²     ®   “q x®   ‘t®   (   Ž®           ‘q®       „ t"".tpl ®   •   t®   u•    t®   u•(   tª      „ s"".autotmp_0003 «   Øÿÿÿs®   uÆ     Æ     «   Øÿÿÿs„ s"".autotmp_0001 r       uðÿÿÿsr       uôÿÿÿs®   èÿÿÿsr       u®       ‘š   @   u«      ²     ²     «      ®   Žr       Ž     ‘
+q«   (   «   èÿÿÿs®   ’²     ²     „ html/template.filenames «   ®   èÿÿÿs®   Žr    ðÿÿÿsr       Žr    ôÿÿÿsr       Ž„ qhtml/template.ParseFiles „ qtype.func(...string) (*html/template.Template, error)      ‘q®      ®   •   t«      ®   Ž®   •    t®      Ž®   •(   t«   •    t¢   ŽuQ     i   p®   u®      t®   •    t®   •    t®   •(   t®   •(   tª      „ qtype.gwp/gwp_context.ParsedTemplate „ runtime.typ ®   “q x„ qruntime.new „ qtype.func(*uint8) *gwp/gwp_context.ParsedTemplate      ‘q®      „ s"".autotmp_0004 ®   øÿÿÿsr       u®   ‘t®       Žš   @   u«      ²     ²     «      ®   •   t	®   Žr    •   t	r       Ž     ‘
+q®   øÿÿÿs«   (   ®   ²     ²     ®   •   t®      ‹„ qtype.chan *gwp/gwp_context.ParsedTemplate „ runtime.chanType ®   “q x®   ‘t®      Ž„  runtime.hchan ®       „ !runtime.elem ®      !„ q"runtime.chansend1 „ q#type.func(*uint8, chan<- *gwp/gwp_context.ParsedTemplate, *gwp/gwp_context.ParsedTemplate)      ‘"q#®   •   t®   •   t®   u•    t®   u•(   tª      „ q$"".init „ q%type.func() ã    ‘$q%u„ q&"".initdoneÂ· q    ‘&qq    %    uQ     –   pq    %       uZ     •   pª      „ q'runtime.throwinit      ‘'q%q       u‘&q„ q(html/template.init      ‘(q%„ q)gwp/gwp_context.init      ‘)q%q       u‘&qª      6    ‘&q     u„ q*type.*runtime.MapType -    oqq *x-    o   qq    x-    o   q   u-    o   qEXžÈ©    u-    o   q	   u-    o   q   u-    o   q   u-    o   q   u„ q+go.string."map[string] *template.Template" -    o    qq +x-    o+qq    +x-    o   +q   u-    o   +q map[stri-    o   +q ng] *tem-    o   +q plate.Te-    o$   +q mplate  -    o*   +qu6    o
++q0   u„ q,weak.type.*map[string] *html/template.Template -    o0   qq ,x-    o8   qq 	x-    o@   qq x6    o
+qH   u„ q-type.*runtime.ChanType -    oqq -x-    o   qq    x-    o   q   u-    o   q=+Ju-    o   q	   u-    o   q   u-    o   q   u-    o   q   u„ q.go.string."chan *gwp_context.ParsedTemplate" -    o    qq .x-    o.qq    .x-    o   .q    u-    o   .q chan *gw-    o   .q p_contex-    o   .q t.Parsed-    o$   .q Template-    o,   .qu6    o
+.q0   u„ q/weak.type.*chan *gwp/gwp_context.ParsedTemplate -    o0   qq /x„ q0type.*gwp/gwp_context.ParsedTemplate -    o8   qq 0x-    o@   q   u6    o
+qH   u„ q1type.*runtime.FuncType -    oqq 1x-    o   qq    x-    o   q   u-    o   qENŠÅª    u-    o   q	   u-    o   q   u-    o   q   u-    o   q   u„ qgo.string."func(*gwp_context.Context, string) (*template.Template, error)" -    o    qq x-    oqq    x-    o   q>   u-    o   q func(*gw-    o   q p_contex-    o   q t.Contex-    o$   q t, strin-    o,   q g) (*tem-    o4   q plate.Te-    o<   q mplate, -    oD   q error)  -    oJ   qu6    o
+qP   u„ qweak.type.*func(*gwp/gwp_context.Context, string) (*html/template.Template, error) „ qtype.func(*gwp/gwp_context.Context, string) (*html/template.Template, error) -    o0   qq x-    o8   qu-    o@   qq `   x-    oH   q   u-    oL   q   u-    oP   qq p   x-    oX   q   u-    o\   q   u-    o`   qq x-    oh   qq 	x-    op   qq x-    ox   qq x6    o
+q€   u-    oqq 1x-    o   qq    x-    o   q   u-    o   qE`—ÅØ    u-    o   q	   u-    o   q   u-    o   q   u-    o   q   u„ qgo.string."func(int, string, string) string" -    o    qq x-    oqq    x-    o   q    u-    o   q func(int-    o   q , string-    o   q , string-    o$   q ) string-    o,   qu6    o
+q0   u„ qweak.type.*func(int, string, string) string -    o0   qq x-    o8   qu-    o@   qq `   x-    oH   q   u-    oL   q   u-    oP   qq x   x-    oX   q   u-    o\   q   u„ qtype.int -    o`   qq x-    oh   qq 	x-    op   qq 	x-    ox   qq 	x6    o
+q€   u-    oqq 1x-    o   qq    x-    o   q   u-    o   qEç¶¶    u-    o   q	   u-    o   q   u-    o   q   u-    o   q   u„ qgo.string."func(*uint8, map[string] *template.Template, string) *template.Template" -    o    qq x-    oqq    x-    o   qG   u-    o   q func(*ui-    o   q nt8, map-    o   q [string]-    o$   q  *templa-    o,   q te.Templ-    o4   q ate, str-    o<   q ing) *te-    oD   q mplate.T-    oL   q emplate -    oS   qu6    o
+qX   u„ qweak.type.*func(*uint8, map[string] *html/template.Template, string) *html/template.Template -    o0   qq x-    o8   qu-    o@   qq `   x-    oH   q   u-    oL   q   u-    oP   qq x   x-    oX   q   u-    o\   q   u„ q	type.*uint8 -    o`   qq 	x-    oh   qq x„ q
+type.string -    op   qq 
+x„ qtype.*html/template.Template -    ox   qq x6    o
+q€   u„ qtype.[]string „ qtype.*runtime.SliceType -    oqq x-    o   qq    x-    o   q   u-    o   qÓ¨ó
+u-    o   q   u-    o   q   u-    o   q   u-    o   q   u„ qgo.string."[]string" -    o    qq x-    oqq    x-    o   q   u-    o   q []string-    o   qu6    o
+q   u„ qweak.type.*[]string -    o0   qq x-    o8   qq 
+x6    o
+q@   u-    oqq 1x-    o   qq    x-    o   q   u-    o   qECã…    u-    o   q	   u-    o   q   u-    o   q   u-    o   q   u„ qgo.string."func(...string) (*template.Template, error)" -    o    qq x-    oqq    x-    o   q+   u-    o   q func(...-    o   q string) -    o   q (*templa-    o$   q te.Templ-    o,   q ate, err-    o4   q or)     -    o7   qu6    o
+q8   u„ qweak.type.*func(...string) (*html/template.Template, error) -    o0   qq x-    o8   q   u-    o@   qq `   x-    oH   q   u-    oL   q   u-    oP   qq h   x-    oX   q   u-    o\   q   u-    o`   qq x-    oh   qq x„ qtype.error -    op   qq x6    o
+qx   u-    oqq 1x-    o   qq    x-    o   q   u-    o   qD_au-    o   q	   u-    o   q   u-    o   q   u-    o   q   u„ qgo.string."func(*uint8) *gwp_context.ParsedTemplate" -    o    qq x-    oqq    x-    o   q(   u-    o   q func(*ui-    o   q nt8) *gw-    o   q p_contex-    o$   q t.Parsed-    o,   q Template-    o4   qu6    o
+q8   u„ qweak.type.*func(*uint8) *gwp/gwp_context.ParsedTemplate -    o0   qq x-    o8   qu-    o@   qq `   x-    oH   q   u-    oL   q   u-    oP   qq h   x-    oX   q   u-    o\   q   u-    o`   qq 	x-    oh   qq 0x6    o
+qp   u„ qtype.chan<- *gwp/gwp_context.ParsedTemplate -    oqq -x-    o   qq    x-    o   q   u-    o   q‰Jru-    o   q	   u-    o   q   u-    o   q   u-    o   q   u„ qgo.string."chan<- *gwp_context.ParsedTemplate" -    o    qq x-    oqq    x-    o   q"   u-    o   q chan<- *-    o   q gwp_cont-    o   q ext.Pars-    o$   q edTempla-    o,   q te      -    o.   qu6    o
+q0   u„ qweak.type.*chan<- *gwp/gwp_context.ParsedTemplate -    o0   qq x-    o8   qq 0x-    o@   q   u6    o
+qH   u-    o#qq 1x-    o   #qq    #x-    o   #q   u-    o   #qEmžôª    u-    o   #q	   u-    o   #q   u-    o   #q   u-    o   #q   u„ qgo.string."func(*uint8, chan<- *gwp_context.ParsedTemplate, *gwp_context.ParsedTemplate)" -    o    #qq x-    oqq    x-    o   qM   u-    o   q func(*ui-    o   q nt8, cha-    o   q n<- *gwp-    o$   q _context-    o,   q .ParsedT-    o4   q emplate,-    o<   q  *gwp_co-    oD   q ntext.Pa-    oL   q rsedTemp-    oT   q late)   -    oY   qu6    o
+q`   u„ qweak.type.*func(*uint8, chan<- *gwp/gwp_context.ParsedTemplate, *gwp/gwp_context.ParsedTemplate) -    o0   #qq x-    o8   #qu-    o@   #qq `   #x-    oH   #q   u-    oL   #q   u-    oP   #qq x   #x-    oX   #qu-    o\   #qu-    o`   #qq 	x-    oh   #qq x-    op   #qq 0x6    o
+#qx   u-    o%qq 1x-    o   %qq    %x-    o   %q   u-    o   %qEö¼‚ö    u-    o   %q	   u-    o   %q   u-    o   %q   u-    o   %q   u„ qgo.string."func()" -    o    %qq x-    oqq    x-    o   q   u-    o   q func()  -    o   qu6    o
+q   u„ qweak.type.*func() -    o0   %qq x-    o8   %qu-    o@   %qq `   %x-    oH   %qu-    oL   %qu-    oP   %qq `   %x-    oX   %qu-    o\   %qu6    o
+%q`   u„ qgo.importpath.gwp/gwp_context. „ qgo.string."gwp/gwp_context" -    oqq    x-    oqq    x-    o   q   u-    o   q gwp/gwp_-    o   q context -    o   qu6    o
+q    u-    o   q   u6    o
+q   u„ qgo.importpath.runtime. „ qgo.string."runtime" -    oqq    x-    oqq    x-    o   q   u-    o   q runtime -    o   qu6    o
+q   u-    o   q   u6    o
+q   u„ q go.importpath.html/template. „ q!go.string."html/template" -    o qq    !x-    o!qq    !x-    o   !q   u-    o   !q html/tem-    o   !q plate   -    o   !qu6    o
+!q    u-    o    q   u6    o
+ q   uP      

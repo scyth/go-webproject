@@ -20,9 +20,9 @@ const (
 	dflt_conf_livetpl = false
 )
 
-// ParseConfig parses the configuration file and does meaningful checks on defined parameters
-// If optional parameters are not met, it sets default values
-// It parses only [default] and [project] sections
+// ParseConfig parses the configuration file and does meaningful checks on defined parameters.
+// If optional parameters are not met, it sets default values.
+// It parses only [default] and [project] sections.
 func ParseConfig(configPath string) (*gwp_context.AppConfig, error) {
 	ac := gwp_context.NewAppConfig()
 
@@ -100,7 +100,7 @@ func ParseConfig(configPath string) (*gwp_context.AppConfig, error) {
 }
 
 // ----------------------------------------
-// Runtime template operations and API
+// Runtime template operations 
 // ----------------------------------------
 
 var (
@@ -125,8 +125,8 @@ func WatchTemplates(ctx *gwp_context.Context) {
 			select {
 			case ev := <-watcher.Event:
 				// cached file was modified
-				if ctx.App.Templates[ev.Name] != nil {
-					delete(ctx.App.Templates, ev.Name)
+				if ctx.Templates[ev.Name] != nil {
+					delete(ctx.Templates, ev.Name)
 				}
 				if WatchList[ev.Name] == true {
 					watcher.RemoveWatch(ev.Name)
@@ -139,7 +139,7 @@ func WatchTemplates(ctx *gwp_context.Context) {
 				return
 
 			case ev := <-ctx.LiveTplMsg:
-				ctx.App.Templates[ev.Name] = ev.Tpl
+				ctx.Templates[ev.Name] = ev.Tpl
 
 				// check if we're already watching this file name
 				if WatchList[ev.Name] == true {
@@ -156,7 +156,7 @@ func WatchTemplates(ctx *gwp_context.Context) {
 
 		for {
 			ev := <-ctx.LiveTplMsg
-			ctx.App.Templates[ev.Name] = ev.Tpl
+			ctx.Templates[ev.Name] = ev.Tpl
 		}
 	}
 

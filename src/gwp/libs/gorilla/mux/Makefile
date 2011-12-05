@@ -1,4 +1,4 @@
-include ../../../../Make.inc
+include $(GWPROOT)/Make.inc
 
 ARCH := $(shell uname -m)
 ARCH_64 := x86_64

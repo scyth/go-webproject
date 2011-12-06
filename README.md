@@ -69,4 +69,4 @@ Open up your browser and see if your code works as expected.
 Writing 3rd party modules
 -------------------------
 
-See: http://go-webproject.appespot.com/pkg/gwp/gwp_module
+See: http://go-webproject.appespot.com/pkg/gwp/gwp_module.html

@@ -99,6 +99,67 @@ func ParseConfig(configPath string) (*gwp_context.AppConfig, error) {
 	return ac, nil
 }
 
+
+// ParseConfigParams parses module specific config file parameters
+func ParseConfigParams(configPath string, section string, params *gwp_context.ModParams) (error) {
+        // config file must parse successfully
+        c, err := goconf.ReadConfigFile(configPath)
+        if err != nil {
+                return err
+        }
+
+	// check if we have this section present
+	haveSection := false
+	if ok := c.HasSection(section); ok {
+		haveSection = true
+	}
+
+	// go through params
+	for _,p := range *params {
+		if p == nil {
+			continue
+		}
+		// check if we have this param defined in config file
+		if !haveSection {
+			// check if this is must-have param
+			if p.Must {
+				return errors.New("Config file error, mandatory parameter " + p.Name +" is missing.")
+			}
+			// assign default value
+			p.Value = p.Default
+			continue
+		}
+		// we have the section
+		// lets see if we can get the value
+		var val interface{}
+		switch p.Type {
+		case gwp_context.TypeInt:
+			val, err = c.GetInt(section, p.Name)
+		case gwp_context.TypeStr:
+			val, err = c.GetString(section, p.Name)
+		case gwp_context.TypeBool:
+			val, err = c.GetBool(section, p.Name)
+		case gwp_context.TypeFloat64:
+			val, err = c.GetFloat64(section, p.Name)
+		default:
+			return errors.New("Invalid parameter type")
+		}
+
+		if err != nil {
+			if p.Must {
+				return errors.New("Config file error, " + err.Error())
+			}
+			// assign default value
+			p.Value = p.Default
+			continue
+		}
+		p.Value = val
+	}
+	return nil	
+}
+
+
+
 // ----------------------------------------
 // Runtime template operations 
 // ----------------------------------------

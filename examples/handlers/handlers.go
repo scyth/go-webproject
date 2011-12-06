@@ -1,10 +1,12 @@
 package main
 
 import (
-//	"gwp/gwp_context"
+	"gwp/gwp_context"
 	"gwp/gwp_template"
+	"gwp/gwp_module"
 	"gwp/libs/gorilla/mux"
-	"gwp/modules/gorilla/sessions"
+	"gwp/modules/mod_sessions"
+	"gwp/modules/mod_example"
 	"bytes"
 	"net/http"
 	"fmt"
@@ -33,20 +35,40 @@ func initHandlers(r *mux.Router) {
 	// this code is based on sample config provided, where gorilla-mux is enabled, so
 	r.HandleFunc("/", indexPage) // otherwise, we would use http.HandleFunc("/", indexPage)
 	r.HandleFunc("/login", loginPage)
-
 		
 }
 
+func initModules(ctx *gwp_context.Context) {
+	// load example module
+	example := mod_example.LoadModule()
+	gwp_module.RegisterModule(ctx, example)
+
+	// load sessions module
+	sess := mod_sessions.LoadModule()
+	gwp_module.RegisterModule(ctx, sess)
+	
+	secretKey := mod_sessions.ReadParamStr("secret-key")
+	encKey := mod_sessions.ReadParamStr("encryption-key")
+	
+        // setup session management. We use filestore as default backend
+        mod_sessions.SetStore("filestore", new(mod_sessions.FileSessionStore))
+	if len(encKey) == 0 {
+        	mod_sessions.SetStoreKeys("filestore", []byte(secretKey))
+	} else {
+		mod_sessions.SetStoreKeys("filestore", []byte(secretKey), []byte(encKey))
+	}
+	
+}
 // checkSession initializes the session, and can also check for specified session parameter
 // returns session data and bool if match is found, or just session data
-func checkSession(req *http.Request, writer http.ResponseWriter, param ...string) (sessions.SessionData, bool) {
-	sess, err := sessions.Session(req, "sf", "filestore")
+func checkSession(req *http.Request, writer http.ResponseWriter, param ...string) (mod_sessions.SessionData, bool) {
+	sess, err := mod_sessions.Session(req, "sf", "filestore")
 	
 	if err != nil {
 		fmt.Println("Session error: ", err.Error())
-		return sessions.SessionData{}, false
+		return mod_sessions.SessionData{}, false
 	}
-	sessions.Init(req, writer)
+	mod_sessions.Init(req, writer)
 	if len(param) > 0 {
 		if _,ok := sess[param[0]]; ok {
 			return sess, true
@@ -104,7 +126,7 @@ func loginPage(writer http.ResponseWriter, req *http.Request) {
 	if req.FormValue("user") == valid_user && req.FormValue("pass") == valid_pass {
 		sess,_ := checkSession(req, writer)
 		sess["session_id"] = sess.GetId() // we set this to indicate we're logged in.
-		sessions.Save(req, writer) 
+		mod_sessions.Save(req, writer) 
 		http.Redirect(writer, req, "/", http.StatusFound)
 		return
 	}

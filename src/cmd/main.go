@@ -4,7 +4,6 @@ import (
 	"gwp/gwp_context"
 	"gwp/gwp_core"
 	"gwp/libs/gorilla/mux"
-	"gwp/modules/gorilla/sessions"
 	"flag"
 	"fmt"
 	"net/http"
@@ -38,10 +37,6 @@ func init() {
 	}
 	ctx.ConfigFile = configPath
 
-	// setup session management. We use filestore as default backend
-	sessions.SetStore("filestore", new(sessions.FileSessionStore))
-	sessions.SetStoreKeys("filestore", []byte("my-simple-key-hmac"))
-
 }
 
 func main() {
@@ -57,11 +52,16 @@ func main() {
 	// if gorilla-mux is not set, we will use default methods from http package
 	if ctx.App.Mux == "gorilla" {
 		router = new(mux.Router)
+		router.RedirectSlash(true)
+		ctx.Router = router
 		initHandlers(router)
 		http.Handle("/", router)
 	} else {
 		initHandlers(nil)
 	}
+
+	// initialize modules
+	initModules(ctx)
 
 	// run the watcher for templates
 	go gwp_core.WatchTemplates(ctx)

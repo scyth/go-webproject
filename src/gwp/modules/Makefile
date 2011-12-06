@@ -1,12 +1,14 @@
 
 DIRS=\
-	sessions\
+	mod_sessions\
+	mod_example\
 
 
 install.dirs: $(addsuffix .install, $(DIRS))
 clean.dirs: $(addsuffix .clean, $(DIRS))
 
 %.install:
+	mkdir -p $(MODPATH)
 	$(MAKE) -C $*
 
 %.clean:

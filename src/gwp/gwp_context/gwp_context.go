@@ -2,11 +2,20 @@ package gwp_context
 
 import (
 	"html/template"
+	"gwp/libs/gorilla/mux"
+)
+
+var (
+        TypeInt     uint8 = 0x01 
+        TypeBool    uint8 = 0x02 
+        TypeStr     uint8 = 0x03 
+        TypeFloat64 uint8 = 0x04 
 )
 
 // Context is used to store all runtime app data (modules, templates, configs...)
 type Context struct {
 	ConfigFile string
+	Router     *mux.Router
 	LiveTplMsg chan *ParsedTemplate
 	ErrorMsg   chan error
 	App        *AppConfig
@@ -44,3 +53,15 @@ type ParsedTemplate struct {
 	Name string
 	Tpl  *template.Template
 }
+
+
+// Param is generic declaration of individual custom config file parameter, defined by modules
+type ModParam struct {   
+        Name    string
+        Value   interface{}
+        Default interface{}
+        Type    uint8
+        Must    bool
+}
+
+type ModParams []*ModParam

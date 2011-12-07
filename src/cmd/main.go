@@ -1,11 +1,11 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"gwp/gwp_context"
 	"gwp/gwp_core"
 	"gwp/libs/gorilla/mux"
-	"flag"
-	"fmt"
 	"net/http"
 	"os"
 )

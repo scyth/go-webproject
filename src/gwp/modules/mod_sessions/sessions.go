@@ -5,7 +5,6 @@
 package mod_sessions
 
 import (
-	"gwp/libs/gorilla/context"
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
@@ -16,6 +15,7 @@ import (
 	"encoding/gob"
 	"errors"
 	"fmt"
+	"gwp/libs/gorilla/context"
 	"hash"
 	"net/http"
 	"strconv"
@@ -451,7 +451,7 @@ func sessionKeys(vars ...string) (string, string) {
 type SessionStore interface {
 	Load(r *http.Request, key string, info *SessionInfo)
 	Save(r *http.Request, w http.ResponseWriter, key string, info *SessionInfo) (bool, error)
-        Init(r *http.Request, w http.ResponseWriter, key string, info *SessionInfo) (bool, error)
+	Init(r *http.Request, w http.ResponseWriter, key string, info *SessionInfo) (bool, error)
 	Encoders() []SessionEncoder
 	SetEncoders(encoders ...SessionEncoder)
 }
@@ -841,7 +841,7 @@ func verifyHmac(h hash.Hash, key string, value []byte, timestamp, minAge,
 		return nil, ErrAuthentication
 	}
 	rv := parts[0]
-	tst, _ := strconv.Atoi64(string(parts[1]))
+	tst, _ := strconv.ParseInt(string(parts[1]), 10, 64)
 	msg := parts[2]
 	if tst == 0 {
 		return nil, ErrBadTimestamp

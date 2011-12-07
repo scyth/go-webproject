@@ -155,7 +155,7 @@ func (c *ConfigFile) GetInt(section string, option string) (value int, err error
 func (c *ConfigFile) GetFloat64(section string, option string) (value float64, err error) {
 	sv, err := c.GetString(section, option)
 	if err == nil {
-		value, err = strconv.Atof64(sv)
+		value, err = strconv.ParseFloat(sv, 64)
 		if err != nil {
 			err = GetError{CouldNotParse, "float64", sv, section, option}
 		}

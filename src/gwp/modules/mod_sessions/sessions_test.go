@@ -9,8 +9,7 @@ import (
 	"crypto/aes"
 	"crypto/hmac"
 	"fmt"
-	"http"
-	"os"
+	"net/http"
 	"testing"
 	"time"
 )
@@ -49,7 +48,7 @@ func (rw *ResponseRecorder) Header() http.Header {
 }
 
 // Write always succeeds and writes to rw.Body, if not nil.
-func (rw *ResponseRecorder) Write(buf []byte) (int, os.Error) {
+func (rw *ResponseRecorder) Write(buf []byte) (int, error) {
 	if rw.Body != nil {
 		rw.Body.Write(buf)
 	}
@@ -103,7 +102,7 @@ func TestEncryption(t *testing.T) {
 	}
 
 	var encrypted, decrypted []byte
-	var err os.Error
+	var err error
 
 	for _, value := range testStringValues {
 		encrypted, err = encrypt(block, []byte(value))
@@ -141,7 +140,7 @@ func TestAuthentication(t *testing.T) {
 	// TODO test too old / too new timestamps
 	hash := hmac.NewSHA256([]byte("secret-key"))
 	key := "session-key"
-	timestamp := time.UTC().Seconds()
+	timestamp := time.Now().UTC().Seconds()
 
 	for _, value := range testStringValues {
 		signed := createHmac(hash, key, []byte(value), timestamp)
@@ -225,7 +224,7 @@ func TestLoadSaveSession(t *testing.T) {
 	var req *http.Request
 	var rsp *ResponseRecorder
 	var hdr http.Header
-	var err os.Error
+	var err error
 	var err2 bool
 	var session SessionData
 	var cookies []string
@@ -306,9 +305,9 @@ func TestLoadSaveSession(t *testing.T) {
 				t.Errorf("Expected %v:%v; Got %v:%v", k, v, k, session[k])
 			}
 		}
-		session["a"] = nil, false
-		session["b"] = nil, false
-		session["c"] = nil, false
+		delete(session, "a")
+		delete(session, "b")
+		delete(session, "c")
 		session["d"] = "4"
 	} else {
 		t.Error(err)
@@ -361,7 +360,7 @@ func TestFlashes(t *testing.T) {
 	var req *http.Request
 	var rsp *ResponseRecorder
 	var hdr http.Header
-	var err os.Error
+	var err error
 	var ok, err2 bool
 	var cookies []string
 	var flashes []interface{}
@@ -442,7 +441,7 @@ func TestKeyRotation(t *testing.T) {
 	var req *http.Request
 	var rsp *ResponseRecorder
 	var hdr http.Header
-	var err os.Error
+	var err error
 	var err2 bool
 	var session SessionData
 	var cookies []string

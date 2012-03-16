@@ -1,15 +1,15 @@
 package main
 
 import (
-	"github.com/scyth/go-webproject/src/gwp/gwp_context"
-	"github.com/scyth/go-webproject/src/gwp/gwp_template"
-	"github.com/scyth/go-webproject/src/gwp/gwp_module"
-	"github.com/scyth/go-webproject/src/gwp/libs/gorilla/mux"
-	"github.com/scyth/go-webproject/src/gwp/modules/mod_sessions"
-	"github.com/scyth/go-webproject/src/gwp/modules/mod_example"
 	"bytes"
 	"net/http"
 	"fmt"
+	"github.com/scyth/go-webproject/gwp/gwp_context"
+	"github.com/scyth/go-webproject/gwp/gwp_template"
+	"github.com/scyth/go-webproject/gwp/gwp_module"
+	"github.com/scyth/go-webproject/gwp/libs/gorilla/mux"
+	"github.com/scyth/go-webproject/gwp/modules/mod_sessions"
+	"github.com/scyth/go-webproject/gwp/modules/mod_example"
 )
 
 type Example struct {

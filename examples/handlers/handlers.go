@@ -1,12 +1,12 @@
 package main
 
 import (
-	"gwp/gwp_context"
-	"gwp/gwp_template"
-	"gwp/gwp_module"
-	"gwp/libs/gorilla/mux"
-	"gwp/modules/mod_sessions"
-	"gwp/modules/mod_example"
+	"github.com/scyth/go-webproject/src/gwp/gwp_context"
+	"github.com/scyth/go-webproject/src/gwp/gwp_template"
+	"github.com/scyth/go-webproject/src/gwp/gwp_module"
+	"github.com/scyth/go-webproject/src/gwp/libs/gorilla/mux"
+	"github.com/scyth/go-webproject/src/gwp/modules/mod_sessions"
+	"github.com/scyth/go-webproject/src/gwp/modules/mod_example"
 	"bytes"
 	"net/http"
 	"fmt"

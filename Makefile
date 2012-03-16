@@ -10,8 +10,8 @@ all:
 	go tool $(EXT)l -o $(TARGET) -L $(INCPATH) build/$(TARGET).$(EXT)	
 
 clean:
-	$(MAKE) -C src/gwp/ clean
-	$(MAKE) -C src/gwp/modules/ clean
+	$(MAKE) -C gwp/ clean
+	$(MAKE) -C gwp/modules/ clean
 	rm -rf build/*
 	rm -f ./runserver
 	find ./ -name "*~" | xargs rm -f

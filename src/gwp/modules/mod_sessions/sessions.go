@@ -10,6 +10,7 @@ import (
 	"crypto/cipher"
 	"crypto/hmac"
 	"crypto/rand"
+	"crypto/sha256"
 	"crypto/subtle"
 	"encoding/base64"
 	"encoding/gob"
@@ -224,7 +225,7 @@ func (f *SessionFactory) SetStoreKeys(key string,
 			}
 		}
 		encoders[i/2] = &Encoder{
-			Hash:      hmac.NewSHA256(pairs[i]),
+			Hash:      hmac.New(sha256.New, pairs[i]),
 			Block:     b,
 			MaxAge:    86400 * 30,
 			MaxLength: 4096,

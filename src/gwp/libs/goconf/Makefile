@@ -2,8 +2,8 @@ include ../../../../Make.inc
 
 all:
 	mkdir -p $(SYSPATH)
-	$(EXT)g -o _go_.$(EXT) -I $(INCPATH) conf.go get.go read.go write.go
-	gopack grc $(SYSPATH)/goconf.a _go_.$(EXT)
+	go tool $(EXT)g -o _go_.$(EXT) -I $(INCPATH) conf.go get.go read.go write.go
+	go tool pack grc $(SYSPATH)/goconf.a _go_.$(EXT)
 	
 clean:
 	rm -f $(SYSPATH)/goconf.a

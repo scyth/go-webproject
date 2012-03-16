@@ -12,8 +12,8 @@ endif
 
 all:
 	mkdir -p $(SYSPATH)/libs/gorilla
-	$(EXT)g -o _go_.6 context.go doc.go
-	gopack grc $(SYSPATH)/libs/gorilla/context.a _go_.$(EXT)
+	go tool $(EXT)g -o _go_.6 context.go doc.go
+	go tool pack grc $(SYSPATH)/libs/gorilla/context.a _go_.$(EXT)
 
 clean:
 	rm -f $(SYSPATH)/libs/gorilla/context.a

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"github.com/scyth/go-webproject/src/gwp/gwp_context"
-	"github.com/scyth/go-webproject/src/gwp/gwp_core"
-	"github.com/scyth/go-webproject/src/gwp/libs/gorilla/mux"
+	"github.com/scyth/go-webproject/gwp/gwp_context"
+	"github.com/scyth/go-webproject/gwp/gwp_core"
+	"github.com/scyth/go-webproject/gwp/libs/gorilla/mux"
 )
 
 var (

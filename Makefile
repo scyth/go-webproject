@@ -1,17 +1,65 @@
-GWPROOT := $(shell pwd)
-export
-include ./Make.inc
+
+libs=\
+	github.com/scyth/go-webproject/gwp/libs/goconf\
+	github.com/scyth/go-webproject/gwp/libs/gorilla/context\
+	github.com/scyth/go-webproject/gwp/libs/gorilla/mux/\
+
+
+packages=\
+	github.com/scyth/go-webproject/gwp/gwp_core\
+	github.com/scyth/go-webproject/gwp/gwp_context\
+	github.com/scyth/go-webproject/gwp/gwp_template\
+	github.com/scyth/go-webproject/gwp/gwp_module\
+
+
+modules=\
+	github.com/scyth/go-webproject/gwp/modules/mod_sessions\
+	github.com/scyth/go-webproject/gwp/modules/mod_example\
 
 all:
-	$(MAKE) -C src/gwp/
-	$(MAKE) -C src/gwp/modules/
+	$(MAKE) install
 	
-	go tool $(EXT)g -o build/$(TARGET).$(EXT) -I $(INCPATH) src/cmd/main.go src/handlers.go
-	go tool $(EXT)l -o $(TARGET) -L $(INCPATH) build/$(TARGET).$(EXT)	
+
+sync:
+	# Downloading packages
+	$(MAKE) sync.dirs
+
+
+install:
+	# Installing packages
+	$(MAKE) install.dirs
+	# Installing binary
+	go build -o runserver src/main.go src/handlers.go
+	
 
 clean:
-	$(MAKE) -C gwp/ clean
-	$(MAKE) -C gwp/modules/ clean
-	rm -rf build/*
-	rm -f ./runserver
+	# Cleaning up packages
+	$(MAKE) clean.dirs
+	# Cleaning up source
 	find ./ -name "*~" | xargs rm -f
+	# Cleaning up binary
+	rm -f ./runserver
+
+
+reinstall:
+	$(MAKE) clean
+	$(MAKE) install
+	
+
+sync.dirs: $(addsuffix .sync, $(libs) $(packages) $(modules))
+install.dirs: $(addsuffix .install, $(libs) $(packages) $(modules))
+clean.dirs: $(addsuffix .clean, $(libs) $(packages) $(modules))
+
+	
+%.sync:
+	go get -d $*
+
+	
+%.install:
+	go install $*
+
+
+%.clean:
+	go clean $*
+
+

@@ -23,7 +23,7 @@ Project is actively maintained and it compiles with the latest Go weekly release
 ### References
 
 * Check out http://go-webproject.appspot.com/ for more documentation.
-* or you can run ` godoc -http:8080 ./src/gwp ` to locally browse package documentation from your browser.
+* or you can run ` godoc -http:8080 ./gwp ` to locally browse package documentation from your browser.
 
 
 ### Notes
@@ -39,6 +39,7 @@ Installation
 
 * `$ git clone git://github.com/scyth/go-webproject.git`
 * `$ cd go-webproject`
+* `$ make sync
 
 
 ### Step 2

@@ -3,6 +3,8 @@ libs=\
 	github.com/scyth/go-webproject/gwp/libs/goconf\
 	github.com/scyth/go-webproject/gwp/libs/gorilla/context\
 	github.com/scyth/go-webproject/gwp/libs/gorilla/mux/\
+	github.com/scyth/go-webproject/gwp/libs/gorilla/securecookie\
+	github.com/scyth/go-webproject/gwp/libs/gorilla/sessions\
 
 
 packages=\
@@ -13,7 +15,7 @@ packages=\
 
 
 modules=\
-	github.com/scyth/go-webproject/gwp/modules/mod_sessions\
+	#github.com/scyth/go-webproject/gwp/modules/mod_sessions\
 	github.com/scyth/go-webproject/gwp/modules/mod_example\
 
 all:

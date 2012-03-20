@@ -21,11 +21,10 @@ all:
 	
 
 sync:
-	# Downloading packages
-	$(MAKE) sync.dirs
-
-
+	go get -u -d github.com/scyth/go-webproject/gwp/gwp_core
+	
 install:
+	go get -d github.com/scyth/go-webproject/gwp/gwp_core
 	# Installing packages
 	$(MAKE) install.dirs
 	# Installing binary
@@ -46,13 +45,8 @@ reinstall:
 	$(MAKE) install
 	
 
-sync.dirs: $(addsuffix .sync, $(libs) $(packages) $(modules))
 install.dirs: $(addsuffix .install, $(libs) $(packages) $(modules))
 clean.dirs: $(addsuffix .clean, $(libs) $(packages) $(modules))
-
-	
-%.sync:
-	go get -d $*
 
 	
 %.install:

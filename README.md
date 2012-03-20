@@ -39,7 +39,6 @@ Installation
 
 * `$ git clone git://github.com/scyth/go-webproject.git`
 * `$ cd go-webproject`
-* `$ make sync
 
 
 ### Step 2
@@ -65,6 +64,17 @@ Compile and run the server, asuming your current working directory is still proj
 * `$ ./runserver -config=config/server.conf`
 
 Open up your browser and see if your code works as expected.
+
+
+### Step 6 - keeping up with the updates
+
+Go-webproject is distributed via github as a single project, consisting of internal packages and source files to build the final executable. However, Go.v1 introduced 
+a go command utility for building and installing packages and executables, and now it's not enough just to `git pull` to start fresh. To make the whole thing more convenient, 
+you can run:
+
+* `$ git pull`  - this will get you latest code for building the executable.
+* `$ make sync` - this will download the latest code for all the packages and will put it in your $GOPATH.
+* `$ make`      - will reinstall all the packages, and will rebuild the executable.
 
 
 Writing 3rd party modules

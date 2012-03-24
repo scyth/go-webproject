@@ -8,6 +8,7 @@ import (
 	"github.com/scyth/go-webproject/gwp/gwp_template"
 	"github.com/scyth/go-webproject/gwp/gwp_module"
 	"github.com/scyth/go-webproject/gwp/libs/gorilla/mux"
+	"github.com/scyth/go-webproject/gwp/libs/gorilla/sessions"
 	"github.com/scyth/go-webproject/gwp/modules/mod_sessions"
 	"github.com/scyth/go-webproject/gwp/modules/mod_example"
 )
@@ -49,28 +50,28 @@ func initModules(ctx *gwp_context.Context) {
 	
 	secretKey := mod_sessions.ReadParamStr("secret-key")
 	encKey := mod_sessions.ReadParamStr("encryption-key")
-	
+
         // setup session management. We use filestore as default backend
-        mod_sessions.SetStore("filestore", new(mod_sessions.FileSessionStore))
 	if len(encKey) == 0 {
-        	mod_sessions.SetStoreKeys("filestore", []byte(secretKey))
+		mod_sessions.RegisterStore([]byte(secretKey))
+
 	} else {
-		mod_sessions.SetStoreKeys("filestore", []byte(secretKey), []byte(encKey))
+		mod_sessions.RegisterStore([]byte(secretKey), []byte(encKey))
 	}
-	
 }
+
 // checkSession initializes the session, and can also check for specified session parameter
 // returns session data and bool if match is found, or just session data
-func checkSession(req *http.Request, writer http.ResponseWriter, param ...string) (mod_sessions.SessionData, bool) {
-	sess, err := mod_sessions.Session(req, "sf", "filestore")
+func checkSession(req *http.Request, writer http.ResponseWriter, param ...string) (*sessions.Session, bool) {
+	sess, err := mod_sessions.GetSession(req, "sf")
 	
 	if err != nil {
 		fmt.Println("Session error: ", err.Error())
-		return mod_sessions.SessionData{}, false
+		return nil, false
 	}
-	mod_sessions.Init(req, writer)
+	//mod_sessions.Init(req, writer)
 	if len(param) > 0 {
-		if _,ok := sess[param[0]]; ok {
+		if _,ok := sess.Values[param[0]]; ok {
 			return sess, true
 		}
 	}
@@ -94,15 +95,16 @@ func indexPage(writer http.ResponseWriter, req *http.Request) {
 	sess,ok := checkSession(req, writer, "session_id")
 	if ok {
 		displayContent = true
-	} else { 
-		displayContent = false 
+	} else {
+		displayContent = false
 	}
 		
 	var s_id string
-	if sid,ok := sess["session_id"]; ok {
+	fmt.Println(sess)
+	if sid,ok := sess.Values["session_id"]; ok {
 		s_id = sid.(string)
 	} else {
-		s_id = sess.GetId()
+		s_id = sess.ID
 	}
 
 	errmsg := req.FormValue("error")
@@ -124,11 +126,15 @@ func loginPage(writer http.ResponseWriter, req *http.Request) {
 	valid_pass := "testp"
 
 	if req.FormValue("user") == valid_user && req.FormValue("pass") == valid_pass {
-		sess,_ := checkSession(req, writer)
-		sess["session_id"] = sess.GetId() // we set this to indicate we're logged in.
-		mod_sessions.Save(req, writer) 
-		http.Redirect(writer, req, "/", http.StatusFound)
-		return
+		if sess,ok := checkSession(req, writer); ok {
+			sess.Values["session_id"] = sess.ID // we set this to indicate we're logged in.
+			mod_sessions.Save(req, writer) 
+			http.Redirect(writer, req, "/", http.StatusFound)
+			return
+		} else {
+			fmt.Println("Something's wrong with session")
+			http.Redirect(writer, req, "/?error=login", http.StatusFound)
+		}
 	}
 	http.Redirect(writer, req, "/?error=login", http.StatusFound)
 }

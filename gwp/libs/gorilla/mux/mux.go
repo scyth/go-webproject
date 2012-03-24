@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"path"
+
 	"github.com/scyth/go-webproject/gwp/libs/gorilla/context"
 )
 

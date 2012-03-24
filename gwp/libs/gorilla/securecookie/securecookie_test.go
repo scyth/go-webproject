@@ -130,23 +130,3 @@ func TestEncoding(t *testing.T) {
 		}
 	}
 }
-
-// ----------------------------------------------------------------------------
-
-type FooBar struct {
-	Foo int
-	Bar string
-}
-
-func TestCustomType(t *testing.T) {
-	s1 := New([]byte("12345"), []byte("1234567890123456"))
-	// Type is not registered in gob. (!!!)
-	src := &FooBar{42, "bar"}
-	encoded, _ := s1.Encode("sid", src)
-
-	dst := &FooBar{}
-	_ = s1.Decode("sid", encoded, dst)
-	if dst.Foo != 42 || dst.Bar != "bar" {
-		t.Fatalf("Expected %#v, got %#v", src, dst)
-	}
-}

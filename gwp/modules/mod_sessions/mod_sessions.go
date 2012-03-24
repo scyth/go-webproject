@@ -3,8 +3,10 @@ package mod_sessions
 import (
 	"os"
 	"fmt"
+	"net/http"
 	"github.com/scyth/go-webproject/gwp/gwp_context"
 	"github.com/scyth/go-webproject/gwp/gwp_module"
+	"github.com/scyth/go-webproject/gwp/libs/gorilla/sessions"
 )
 
 // myname represents 'official' module name
@@ -27,6 +29,7 @@ func LoadModule() gwp_module.Module {
 // ModSessions is base struct for this module. It will implement Module interface.
 type ModSessions struct {
 	ModCtx *gwp_module.ModContext
+	Store *sessions.FilesystemStore
 }
 
 
@@ -37,6 +40,7 @@ func (ms *ModSessions) ModInit(modCtx *gwp_module.ModContext, err error) {
 		os.Exit(1)
 	}
 	ms.ModCtx = modCtx
+	ms.Store = new(sessions.FilesystemStore)
 }
 
 // GetParams returns *ModParams or nil if we don't want custom parameters in server.conf.
@@ -62,4 +66,22 @@ func ReadParamStr(name string) string {
 		}
 	}
 	return ""
+}
+
+// RegisterStore registers a session store. This module uses FilesystemStore
+func RegisterStore(keyPairs ...[]byte) {
+	store := sessions.NewFilesystemStore("", keyPairs...)
+	M.Store = store
+}
+
+
+// GetSession returns a session
+func GetSession(r *http.Request, session_name string) (*sessions.Session, error) {
+	s, err := M.Store.Get(r, session_name)
+	return s, err
+}
+
+// Save calls sessions.Save
+func Save(r *http.Request, w http.ResponseWriter) error {
+	return sessions.Save(r, w)
 }

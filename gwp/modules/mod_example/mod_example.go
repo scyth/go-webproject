@@ -72,14 +72,14 @@ type Content struct {
 
 // adminHandler function serves content.
 func adminHandler(w http.ResponseWriter, r *http.Request) {
-	sess,_ := mod_sessions.Session(r, "sf", "filestore")
+	sess,_ := mod_sessions.GetSession(r, "sf")
         tpl, err := gwp_template.Load(M.ModCtx.Ctx, "admin.html")
         if err != nil {
                 http.Error(w, err.Error(), http.StatusInternalServerError)
                 return
         }
 
-        mydata := Content{ExampleData: sess.GetId()}
+        mydata := Content{ExampleData: sess.ID}
         buff := new(bytes.Buffer)
 
         tpl.Execute(buff, mydata)

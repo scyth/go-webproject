@@ -10,7 +10,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/scyth/go-webproject/gwp/libs/gorilla/securecookie"
+	"code.google.com/p/gorilla/securecookie"
 )
 
 // Store is an interface for custom session stores.

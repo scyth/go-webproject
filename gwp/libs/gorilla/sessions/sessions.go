@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/scyth/go-webproject/gwp/libs/gorilla/context"
+	"code.google.com/p/gorilla/context"
 )
 
 // Default flashes key.

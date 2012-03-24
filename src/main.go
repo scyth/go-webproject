@@ -52,7 +52,7 @@ func main() {
 	// if gorilla-mux is not set, we will use default methods from http package
 	if ctx.App.Mux == "gorilla" {
 		router = new(mux.Router)
-		router.RedirectSlash(true)
+		router.StrictSlash(true)
 		ctx.Router = router
 		initHandlers(router)
 		http.Handle("/", router)

@@ -341,19 +341,22 @@ func flashKey(vars ...string) (string, []string) {
 // Context
 // ----------------------------------------------------------------------------
 
-// ns is the request context namespace for this package.
-var ns = new(context.Namespace)
+//  The key type is interface{} so a key can be of any type that supports equality.
+//  Here we define a key using a custom int type to avoid name collisions:
+
+type contextKey int
+const key1 contextKey = 0
 
 // getRequestSessions returns a sessions container for a single request.
-func getRequestSessions(f *SessionFactory,
-	r *http.Request) *requestSessions {
+func getRequestSessions(f *SessionFactory, r *http.Request) *requestSessions {
+
 	var s *requestSessions
-	rv := ns.Get(r)
+	rv := context.DefaultContext.Get(r, key1)
 	if rv != nil {
 		s = rv.(*requestSessions)
 	} else {
 		s = &requestSessions{factory: f, request: r}
-		ns.Set(r, s)
+		context.DefaultContext.Set(r, key1, s)
 	}
 	return s
 }

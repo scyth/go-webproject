@@ -1,0 +1,87 @@
+Development version
+-------------------
+- schema: now properly supports pointers to basic types
+	(thanks, Andrew Zeneski).
+
+
+Gorilla 0.9 - February 12, 2012
+-------------------------------
+This is the first tagged release of Gorilla and targets Go1.
+
+- Changed import paths to follow go tool recommendation. New ones:
+	- code.google.com/p/gorilla/appengine/sessions
+	- code.google.com/p/gorilla/context
+	- code.google.com/p/gorilla/mux
+	- code.google.com/p/gorilla/rpc
+	- code.google.com/p/gorilla/rpc/json
+	- code.google.com/p/gorilla/schema
+	- code.google.com/p/gorilla/sessions
+- context:
+	- Complete rewrite. Context keys are now interface{} so packages
+		can  define custom types to avoid name collisions. As a result,
+		Namespaces became irrelevant and were dropped.
+	- Usage is much simpler. See updated documentation.
+- mux:
+	- Removed:
+		- Router.AddRoute()
+		- Router.Handler()
+		- Router.HandlerFunc()
+		- Router.NamedRoutes (no longer a public field)
+		- Route.Clone()
+		- Route.RedirectSlash()
+		- Route.URLDebug()
+		- Route.URLHostDebug()
+		- Route.URLPathDebug()
+		- Route.Handle()
+		- Route.HandleFunc()
+		- RouteVars (no longer a special type)
+	- Renamed:
+		- Router.RedirectSlash() to StrictSlash()
+		- Route.NewRouter() to Subrouter()
+		- Route.Matcher() to MatcherFunc()
+		- Route.URLDebug() to URL()
+		- Route.URLHostDebug() to URLHost()
+		- Route.URLPathDebug() to URLPath()
+		- Route.Error() to GetError()
+	- Changed:
+		- URL(), URLHost() and URLPath() now return
+			(url, error).
+		- Signature for Router/Route.Match() and custom
+			matchers is now:
+			func(*http.Request, *RouteMatch) bool
+	- Added:
+		- NewRouter()
+		- Router.GetRoute()
+		- Router.Headers()
+		- Router.Host()
+		- Router.MatcherFunc()
+		- Router.Methods()
+		- Router.Path()
+		- Router.PathPrefix()
+		- Router.Queries()
+		- Router.Schemes()
+		- Route.GetHandler()
+	- Improvements:
+		- Much simplified matching logic.
+		- Zero panic. Routes with errors store the first error
+			and are never tested for matches.
+		- Routes from subrouters can now build URLs using
+			the information from the parent router.
+		- Routes from subrouters use the parent router
+			path or path prefix, if defined, as base for their
+			paths.
+- rpc/jsonrpc:
+	- Complete rewrite. There are now two packages, json and json/rpc.
+		The JSON codec is registered in the RPC server to serve requests
+		with a given content-type.
+	- Although there are changes in how to register services, and a
+		JSON codec must be explicitly registered, the signature to call
+		service methods is the same, so existing services don't need
+		changes. It is: func(*http.Request, *args, *reply) error
+- schema:
+	- Complete rewrite.
+	- tag for custom field names is now "schema" instead of
+		"schema-name". If the tag is "-" the field is never filled.
+	- Map fields are no longer supported.
+	- Fields in slices of structs require the slice index to be
+		specified in the key.

@@ -126,7 +126,7 @@ func loginPage(writer http.ResponseWriter, req *http.Request) {
 	if req.FormValue("user") == valid_user && req.FormValue("pass") == valid_pass {
 		sess,_ := checkSession(req, writer)
 		sess.Values["session_id"] = sess.ID // we set this to indicate we're logged in.
-		mod_sessions.Save(req, writer) 
+		mod_sessions.Save(req, writer, sess) 
 		http.Redirect(writer, req, "/", http.StatusFound)
 		return
 	}

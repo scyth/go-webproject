@@ -90,3 +90,21 @@ func GetSession(r *http.Request, session_name string) (*sessions.Session, error)
 func Save(r *http.Request, w http.ResponseWriter, s *sessions.Session) error {
 	return M.Store.Save(r, w, s)
 }
+
+
+// checkSession initializes the session, and can also check for specified session parameter
+// returns session data and bool if match is found, or just session data
+func CheckSession(req *http.Request, writer http.ResponseWriter, param ...string) (*sessions.Session, bool) {
+        sess, err := GetSession(req, "sf")
+        
+        if err != nil {
+                fmt.Println("Session error: ", err.Error())
+                return sess, false
+        }
+        if len(param) > 0 {
+                if _,ok := sess.Values[param[0]]; ok {
+                        return sess, true
+                }
+        }
+        return sess, false
+}

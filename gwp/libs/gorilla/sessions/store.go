@@ -9,8 +9,9 @@ import (
 	"net/http"
 	"os"
 	"sync"
+	"fmt"
 
-	"code.google.com/p/gorilla/securecookie"
+	"github.com/scyth/go-webproject/gwp/libs/gorilla/securecookie"
 )
 
 // Store is an interface for custom session stores.
@@ -176,7 +177,8 @@ func (s *FilesystemStore) New(r *http.Request, name string) (*Session, error) {
 func (s *FilesystemStore) Save(r *http.Request, w http.ResponseWriter,
 	session *Session) error {
 	if session.ID == "" {
-		session.ID = string(securecookie.GenerateRandomKey(32))
+		k := securecookie.GenerateRandomKey(24)
+		session.ID = fmt.Sprintf("%x", k)
 	}
 	if err := s.save(session); err != nil {
 		return err

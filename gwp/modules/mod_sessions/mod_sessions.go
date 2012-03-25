@@ -7,6 +7,7 @@ import (
 	"github.com/scyth/go-webproject/gwp/gwp_context"
 	"github.com/scyth/go-webproject/gwp/gwp_module"
 	"github.com/scyth/go-webproject/gwp/libs/gorilla/sessions"
+	"github.com/scyth/go-webproject/gwp/libs/gorilla/securecookie"
 )
 
 // myname represents 'official' module name
@@ -23,6 +24,7 @@ var M *ModSessions
 // LoadModule is a MUST for every module. It returns Module interface.
 func LoadModule() gwp_module.Module {
 	M = new(ModSessions)
+	M.Store = new(sessions.FilesystemStore)
 	return M
 }
 
@@ -40,7 +42,6 @@ func (ms *ModSessions) ModInit(modCtx *gwp_module.ModContext, err error) {
 		os.Exit(1)
 	}
 	ms.ModCtx = modCtx
-	ms.Store = new(sessions.FilesystemStore)
 }
 
 // GetParams returns *ModParams or nil if we don't want custom parameters in server.conf.
@@ -78,10 +79,14 @@ func RegisterStore(keyPairs ...[]byte) {
 // GetSession returns a session
 func GetSession(r *http.Request, session_name string) (*sessions.Session, error) {
 	s, err := M.Store.Get(r, session_name)
+	if s.ID == "" {
+		k := securecookie.GenerateRandomKey(24)
+		s.ID = fmt.Sprintf("%x", k)
+	}
 	return s, err
 }
 
 // Save calls sessions.Save
-func Save(r *http.Request, w http.ResponseWriter) error {
-	return sessions.Save(r, w)
+func Save(r *http.Request, w http.ResponseWriter, s *sessions.Session) error {
+	return M.Store.Save(r, w, s)
 }

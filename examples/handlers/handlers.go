@@ -66,10 +66,9 @@ func checkSession(req *http.Request, writer http.ResponseWriter, param ...string
 	sess, err := mod_sessions.GetSession(req, "sf")
 	
 	if err != nil {
-		fmt.Println("Session error: ", err.Error())
+                fmt.Println("Session error: ", err.Error())
 		return nil, false
 	}
-	//mod_sessions.Init(req, writer)
 	if len(param) > 0 {
 		if _,ok := sess.Values[param[0]]; ok {
 			return sess, true
@@ -100,7 +99,6 @@ func indexPage(writer http.ResponseWriter, req *http.Request) {
 	}
 		
 	var s_id string
-	fmt.Println(sess)
 	if sid,ok := sess.Values["session_id"]; ok {
 		s_id = sid.(string)
 	} else {
@@ -126,16 +124,13 @@ func loginPage(writer http.ResponseWriter, req *http.Request) {
 	valid_pass := "testp"
 
 	if req.FormValue("user") == valid_user && req.FormValue("pass") == valid_pass {
-		if sess,ok := checkSession(req, writer); ok {
-			sess.Values["session_id"] = sess.ID // we set this to indicate we're logged in.
-			mod_sessions.Save(req, writer) 
-			http.Redirect(writer, req, "/", http.StatusFound)
-			return
-		} else {
-			fmt.Println("Something's wrong with session")
-			http.Redirect(writer, req, "/?error=login", http.StatusFound)
-		}
+		sess,_ := checkSession(req, writer)
+		sess.Values["session_id"] = sess.ID // we set this to indicate we're logged in.
+		mod_sessions.Save(req, writer) 
+		http.Redirect(writer, req, "/", http.StatusFound)
+		return
 	}
 	http.Redirect(writer, req, "/?error=login", http.StatusFound)
+	return
 }
 

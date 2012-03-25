@@ -56,6 +56,6 @@ clean.dirs: $(addsuffix .clean, $(libs) $(packages) $(modules))
 
 
 %.clean:
-	go clean $*
+	go clean -i $*
 
 

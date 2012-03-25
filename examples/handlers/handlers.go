@@ -3,12 +3,11 @@ package main
 import (
 	"bytes"
 	"net/http"
-	"fmt"
+	//"fmt"
 	"github.com/scyth/go-webproject/gwp/gwp_context"
 	"github.com/scyth/go-webproject/gwp/gwp_template"
 	"github.com/scyth/go-webproject/gwp/gwp_module"
 	"github.com/scyth/go-webproject/gwp/libs/gorilla/mux"
-	"github.com/scyth/go-webproject/gwp/libs/gorilla/sessions"
 	"github.com/scyth/go-webproject/gwp/modules/mod_sessions"
 	"github.com/scyth/go-webproject/gwp/modules/mod_example"
 )
@@ -60,25 +59,6 @@ func initModules(ctx *gwp_context.Context) {
 	}
 }
 
-// checkSession initializes the session, and can also check for specified session parameter
-// returns session data and bool if match is found, or just session data
-func checkSession(req *http.Request, writer http.ResponseWriter, param ...string) (*sessions.Session, bool) {
-	sess, err := mod_sessions.GetSession(req, "sf")
-	
-	if err != nil {
-                fmt.Println("Session error: ", err.Error())
-		return nil, false
-	}
-	if len(param) > 0 {
-		if _,ok := sess.Values[param[0]]; ok {
-			return sess, true
-		}
-	}
-	return sess, false
-	
-}
-
-
 // indexPage() is a handler which will load some template and send the result back to the client
 func indexPage(writer http.ResponseWriter, req *http.Request) {
 	tpl, err := gwp_template.Load(ctx, "index.html")
@@ -91,7 +71,7 @@ func indexPage(writer http.ResponseWriter, req *http.Request) {
 
 	// if session parameter "session_id" is present, we already have session set and we can show the content
 	// otherwise, we will display login form
-	sess,ok := checkSession(req, writer, "session_id")
+	sess,ok := mod_sessions.CheckSession(req, writer, "session_id")
 	if ok {
 		displayContent = true
 	} else {
@@ -124,7 +104,7 @@ func loginPage(writer http.ResponseWriter, req *http.Request) {
 	valid_pass := "testp"
 
 	if req.FormValue("user") == valid_user && req.FormValue("pass") == valid_pass {
-		sess,_ := checkSession(req, writer)
+		sess,_ := mod_sessions.CheckSession(req, writer)
 		sess.Values["session_id"] = sess.ID // we set this to indicate we're logged in.
 		mod_sessions.Save(req, writer, sess) 
 		http.Redirect(writer, req, "/", http.StatusFound)

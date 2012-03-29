@@ -6,7 +6,7 @@ Go-webproject is an opensource web application framework written in The Go Progr
 It is not a Go package that you can import elsewhere. It is completely standalone application which 
 consists of a native, high performant web server and surrounding framework for application code. 
 It is designed to be very easy to start coding with, but still easily extensible, with its flexible modular design. 
-Project is actively maintained and it compiles with the latest Go weekly release - which is at the moment: weekly.2012-03-22 (RC2).
+Project is actively maintained and it compiles with Go.1 release.
 
 
 ### Features
@@ -23,8 +23,7 @@ Project is actively maintained and it compiles with the latest Go weekly release
 ### References
 
 * Check out http://go-webproject.appspot.com/ for more documentation.
-* or you can run ` godoc -http:8080 ./gwp ` to locally browse package documentation from your browser.
-
+* Check out http://gorilla-web.appspot.com/pkg/gorilla/mux/ for documentation on mux routing API.
 
 ### Notes
 

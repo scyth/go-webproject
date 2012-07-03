@@ -1,9 +1,0 @@
-syntax:glob
-*.[568]
-*.a
-*.DS_Store
-*.out
-*.py[co]
-_obj
-_temp
-_test*

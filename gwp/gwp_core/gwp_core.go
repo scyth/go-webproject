@@ -2,7 +2,6 @@ package gwp_core
 
 import (
 	"errors"
-	"exp/inotify"
 	"os"
 	"strings"
 	"github.com/scyth/go-webproject/gwp/libs/goconf"

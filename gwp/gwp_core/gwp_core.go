@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 	"github.com/scyth/go-webproject/gwp/libs/goconf"
+        "github.com/scyth/go-webproject/gwp/libs/inotify"
 	"github.com/scyth/go-webproject/gwp/gwp_context"
 )
 

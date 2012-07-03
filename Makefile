@@ -1,5 +1,6 @@
 
 libs=\
+	github.com/scyth/go-webproject/gwp/libs/inotify\
 	github.com/scyth/go-webproject/gwp/libs/goconf\
 	github.com/scyth/go-webproject/gwp/libs/gorilla/context\
 	github.com/scyth/go-webproject/gwp/libs/gorilla/mux/\

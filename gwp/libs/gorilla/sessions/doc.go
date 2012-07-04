@@ -23,7 +23,7 @@ Let's start with an example that shows the sessions API in a nutshell:
 
 	import (
 		"net/http"
-		"code.google.com/p/gorilla/sessions"
+		"github.com/scyth/go-webproject/gwp/libs/gorilla/sessions"
 	)
 
 	var store = sessions.NewCookieStore([]byte("something-very-secret"))

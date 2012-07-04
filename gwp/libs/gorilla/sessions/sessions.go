@@ -8,8 +8,7 @@ import (
 	"encoding/gob"
 	"fmt"
 	"net/http"
-
-	"code.google.com/p/gorilla/context"
+	"github.com/scyth/go-webproject/gwp/libs/gorilla/context"
 )
 
 // Default flashes key.
